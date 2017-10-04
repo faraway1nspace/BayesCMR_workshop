@@ -1,9 +1,0 @@
-\frametitle{Intuiting Probability Distributions}
-\begin{itemize}
-\item easy to learn in \texttt{R} \\
-\end{itemize}
-e.g., \(r\sim\text{Beta}(a,b)\) \\
-\texttt{r <- rbeta(10000, 0.5, 0.5)}
-\begin{center}
-\includegraphics[width=0.78\textwidth,height=0.78\textheight]{beta.eps}
-\end{center}
