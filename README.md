@@ -1,4 +1,4 @@
-# Bayesian Capture-Recapture in JAGS: Workshop for SMM 2017 Bienniel Conference
+# Bayesian Capture-Recapture in JAGS: Workshop for SMM 2017 Biennial Conference
 Welcome to the SMM2017 workshop on Bayesian Capture-recapture. This page will contain materials used during the full-day workshop.
 
 INSTALLATION
