@@ -1,0 +1,11 @@
+# R History files
+.Rhistory
+.Rapp.history
+
+# Emacs temp files
+*~
+[#]*[#]
+.\#*
+
+# Development materials
+dev_materials/*

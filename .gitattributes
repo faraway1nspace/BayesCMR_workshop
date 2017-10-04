@@ -1,0 +1,11 @@
+# set default behaviour
+* text=auto
+
+# set windows directory to CRLF
+*WINDOWS.R text eol=crlf
+
+# Denote binaries
+*.png binary
+*.jpg binary
+*.tif binary
+*.gif binary
