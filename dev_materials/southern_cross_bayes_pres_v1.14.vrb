@@ -1,0 +1,15 @@
+\frametitle{Posterior Inference (estimation example)}
+\begin{block}{Example 1:}
+\begin{itemize}
+\item men's height, n=20 observations.
+\item \(y_i\sim\mathcal{N}(175,10^2)\)
+\end{itemize}
+\texttt{y <- c(183.46, 182.32, 178.31, 181.36, 165.12, 185.68, 170.47, 178.11, 174.86, 182.03, 180.09, 172.88, 177.94, 177.26, 182.58, 171, 173.74, 177.78, 180.02, 163.05)}
+\begin{itemize}
+\item estimate \(\theta=[\mu,\sigma^2]\): mean population height and variance
+\item priors:  \(p(\mu)=\mathcal{N}(0,90^2),\ p(\sigma^2)=\mathcal{IG}(0.1,0.1)\)
+\item specify a likelihood: \(\mathcal{L}(\mathbf{y}\vert\mu,\sigma^2)=\prod_i^n\mathcal{N}(y_i; \mu,\sigma^2)\)
+\end{itemize}
+\end{block}
+\begin{block}{\emph{now run a Gibbs sampler to approximate the posterior} \(p(\mu,\sigma^2\vert \mathbf{y})\dots\)}
+\end{block}

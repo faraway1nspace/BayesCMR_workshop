@@ -1,0 +1,493 @@
+#+TITLE: Introduction to Bayesian Inference
+#+AUTHOR: Robert W Rankin (Murdoch University, PhD Candidate)
+#+EMAIL: r.rankin@murdoch.edu.au
+#+LATEX_HEADER: \usepackage{color}
+#+DESCRIPTION: 
+#+KEYWORDS: 
+* Outline
+** Philosophical differences
+- Frequentists vs. Bayesian
+** Priors
+- densities, impacts
+** Practise: JAGS
+** Computation (e.g., Gibbs sampling, MCMC; if time)
+- simulation-based approximatation of the Posteriors
+
+* Advantages of Bayesian Inference
+- inference statesments: easy to understand (only Bayesians can make probabilistic statements about $\theta$)
+- small sample sizes: exact inference
+- missing data: very easy to impute
+- integrate other information, or calculate 'derived parameters'
+** Hierarchical Bayesian
+- model dependences (space & time)
+- "random-effects" models
+- "model-selection" / "model-multi inference" (AIC, Lasso, etc., are just types of Bayesian models)
+- shrinkage: deflate influence of outlier values
+
+* What is "Bayesian" inference?
+** what comes to mind when you think about "Bayesian"
+- ???
+* What is "Bayesian" inference?
+** what comes to mind when you think about "Bayesian"
+- Priors: most common ecologist's answer (not necessarily true)
+- Posterior density
+ $p(\theta\vert Y)$ 
+-- "(posterior) probability density of $\theta$ \emph{given} the observed data $Y$".
+- inference on \theta \emph{given} data
+- \theta has a \textbf{distribution} of values
+
+* What is "Bayesian" inference
+** compare to the Likelihood
+- Priors
+- Posterior density
+ $p(\theta\vert Y)$ 
+-- "(posterior) probability density of $\theta$ \emph{given} the observed data $Y$".
+-- \emph{Only} Bayesian's have access to the Posterior
+- Likelihood: $p(Y;\theta)$
+-- "the joint probability of a realization of the data \emph{given} a particular value of $\theta$".
+** Maximum-Likelihood
+- basis most Frequentist analysis
+- Often (but not always) the MLE is the best estimator according to Frequentist's values (consistency, unbiased, etc)
+* The likelihood & Frequentism
+- before we can talk about the posterior... what is the likelihood?
+\begin{center}
+$p(Y \vert \theta)$
+\end{center}
+\textbf{data} is what is random; $\theta$ is given?
+- find the value of $\theta$ that \emph{maximizes} the probability of having observed the data
+- Frequentist emphasize \emph{repeated use}: 
+if repeat the experiment -> observed slightly different data.  Want estimates that are optimal over all theorectical samples of data.
+* A little demotivation
+** Most Biologists are "Agnostic Bayesians"
+- \textbf{Frequentist} vs. \textbf{Bayesian}: point estimates nearly identical (under certain conditions)
+** Example data:
+- men's height, n=20 observations
+- first run the Frequentist's $\text{glm}(y\sim1)$ function
+* Frequentist Example
+** Example data:
+- men's height, n=20 observations
+- first run the Frequentist's $\text{glm}(y\sim1)$ function
+\color{blue}
+#+begin_src R :session *R* :results output :exports results :cache yes
+mu.true = 175; sd.true = 10; n = 20
+y = rnorm(n,mu.true,sd.true)
+# output the MLE from glm
+mle.model=glm(y~1); 
+mle.hat=summary(mle.model)$coefficients
+mle=c(MLE =mle.hat[1,"Estimate"],se=mle.hat[1,"Std. Error"], lo95CI=qnorm(0.025,mle.hat[1,"Estimate"],mle.hat[1,"Std. Error"]), hi95CI=qnorm(0.975,mle.hat[1,"Estimate"],mle.hat[1,"Std. Error"]))
+
+# Bayesian: start with priors
+ybar=mean(y);
+priors.norm=list(mu = 0,sd=90) # vague prior on mu
+priors.gamma=list(a=0.1,b=0.1) # va
+# gibbs sampling
+mcmc = matrix(0,5100,2)
+mu.star<-mcmc[1,1]<-10 # initialize the first values of the mcmc chain
+sigma2.star<-mcmc[1,2]<-4 # initialize 
+for(i in 2:nrow(mcmc)){
+ mcmc[i,1]<-mu.star<-rnorm(1,(priors.norm$mu*priors.norm$sd^(-2)+ ybar*n/sigma2.star)/(priors.norm$sd^-2+n/sigma2.star),
+   sd=sqrt(1/(priors.norm$sd^-2+n/sigma2.star)))
+ mcmc[i,2]<-sigma2.star<-1/rgamma(1,priors.gamma$a+n/2,priors.gamma$b+ sum((y-ybar)^2)/2)
+}
+mcmc <- mcmc[round(seq(101,5000,length.out=3000)),] # subsample just 3000 to reduce autocorrelation
+poste=c(mu=mean(mcmc[,1]),se=sd(mcmc[,1]),lo95CI=quantile(mcmc[,1],0.025,name=FALSE),hi95CI=quantile(mcmc[,1],0.975,name=FALSE))
+print(summary(glm(y~1))$coefficients)
+#+end_src
+\color{black}
+- Frequentist: start with a point-estimate, then estimate:
+\color{blue}
+#+begin_src R :session *R* :results output :exports results :cache yes
+print("Frequentist:")
+print(mle)
+#+end_src
+\color{black}
+* Likelihood
+#+begin_src R :session *R* :results output graphics :file loglike.png :width 700 :height 400 :exports results
+xseq=seq(qnorm(0.015,mean=mle["MLE"],mle["se"]),to=qnorm(0.985,mean=mle["MLE"],mle["se"]),length=100)
+loglike = function(x){sum(dnorm(x=y,mean=x,sd=mle["se"],log=TRUE))} # loglikelihood
+likelihood = exp(sapply(xseq,loglike)-max(sapply(xseq,loglike))) # use exp sum trick
+par(mar=c(2.5,1.7,1,0),mgp=c(1.7,0.8,0))
+print(plot(xseq,likelihood,main="likelihood profile for Theta (men's height)",typ="l",col="blue",xlab=expression(theta)),cex=1.2)
+abline(v=mle["MLE"],col="red")
+#+end_src
+- "It would be very (un)likely to have seen the data that I saw, if the value of $\theta$ were X"
+- Choose $\theta$: that which maximize's the likelihood seeing $Y$
+- $\theta_\text{MLE}$ is NOT the "most probabilty value of $\theta$
+
+* Bayesians: The Posterior
+- Frequentist: start with a point-estimate (MLE), then estimate
+ S.E., 95% Confidence interval, etc
+\color{blue}
+#+begin_src R :session *R* :results output :exports results :cache yes
+print("Frequentist:")
+print(mle)
+#+end_src
+\color{black}
+- Bayesian start with a distribution, and then summarize it with simple descriptive statistics
+Mean, mode, S.E., 95% Credibility interval
+\color{blue}
+#+begin_src R :session *R* :results output :exports results :cache yes
+print("Bayesian")
+print(poste)
+#+end_src
+
+* Posterior density
+- IS a probability distribution
+#+begin_src R :session *R* :results output graphics :file posterior1.png :width 700 :height 400 :exports results
+par(mar=c(2.5,1.7,1,0),mgp=c(1.7,0.8,0))
+plot(density(mcmc[,1],adjust=1.5),xlab=expression(theta),ylab=expression(pdf(theta)),main="Posterior density")
+#+end_src
+- easy to interpret
+* Posterior density
+- IS a probability distribution
+#+begin_src R :session *R* :results output graphics :file posterior2.png :width 700 :height 400 :exports results
+d <- density(mcmc[,1],adjust=1.5)
+par(mar=c(2.5,1.7,1,0),mgp=c(1.7,0.8,0))
+plot(d,xlab=expression(theta),ylab=expression(pdf(theta)),main="Posterior density")
+text(x=d$x[which(d$y==max(d$y))],y=d$y[which(d$y==max(d$y))],labels="MODE",col="red",cex=1.5)
+#+end_src
+- Posterior mode: most probable value
+- Posterior mean $\mathbb{E}[\theta]=\int p(\theta\vert Y)\theta d\theta$: expected value
+* Posterior density
+- IS a probability distribution
+#+begin_src R :session *R* :results output graphics :file posterior3.png :width 700 :height 400 :exports results
+d <- density(mcmc[,1],adjust=1.5)
+par(mar=c(2.5,1.7,1,0),mgp=c(1.7,0.8,0))
+plot(d,xlab=expression(theta),ylab=expression(pdf(theta)),main="Posterior density")
+text(x=d$x[which(d$y==max(d$y))],y=d$y[which(d$y==max(d$y))],labels="MODE",col="red",cex=1.5)
+# calculate the probability that theta is greater than 175
+pgr025 = quantile(mcmc[,1],c(0.025))
+pgr975 = quantile(mcmc[,1],c(0.975))
+polygon(x=c(d$x[which(d$x>=pgr025 & d$x <= pgr975)],rev(d$x[which(d$x>=pgr025 & d$x <= pgr975)])), y= c(d$y[which(d$x>=pgr025 & d$x <= pgr975)],rep(0,length(which(d$x>=pgr025 & d$x <= pgr975)))),col="grey70")
+text(x=mean(c(pgr025,pgr975)), y = d$y[round(length(d$y)/2)]/2, labels=expression("95% Probability "~theta~" is in here"), cex=2, col="red")
+#+end_src
+- Posterior mode: most probable value
+- Posterior mean $\mathbb{E}[\theta]=\int p(\theta\vert Y)\theta d\theta$: expected value
+- 95%CI of $\theta$
+
+* Posterior density
+- IS a probability distribution
+#+begin_src R :session *R* :results output graphics :file posterior4.png :width 700 :height 400 :exports results
+d <- density(mcmc[,1],adjust=1.5)
+par(mar=c(2.5,1.7,1,0),mgp=c(1.7,0.8,0))
+plot(d,xlab=expression(theta),ylab=expression(pdf(theta)),main="Posterior density")
+text(x=d$x[which(d$y==max(d$y))],y=d$y[which(d$y==max(d$y))],labels="MODE",col="red",cex=1.5)
+# calculate the probability that theta is greater than 175
+pgr50 = mean(mcmc[,1]>=175)
+polygon(x=c(d$x[which(d$x>=175)],rev(d$x[which(d$x>=175)])), y= c(d$y[which(d$x>=175)],rep(0,length(which(d$x>=175)))),col="grey70")
+text(x=mean(c(d$x[which(d$x>=175)], rev(d$x[which(d$x>=175)]))), y = mean(c(d$y[which(d$x>=175)], rep(0,length(which(d$x>=175))))), labels=substitute(P(theta>175)*"="*k,list(k=round(pgr50,2))), cex=2, col="red")
+#+end_src
+- Posterior mode: most probable value
+- Posterior mean $\mathbb{E}[\theta]=\int p(\theta\vert Y)\theta d\theta$: expected value
+- What is the probability that $\theta>X$? Area of $p(\theta\vert Y)>X$
+
+* A little demotivation
+** Most Biologists are "Agnostic Bayesians"
+- \textbf{Frequentist} vs. \textbf{Bayesian}: point estimates nearly identical (under certain conditions)
+\color{red}
+*** Example: 
+- men's height, n=20 observations
+ S.E. and 95\% CI
+\color{blue}
+#+begin_src R :session *R* :results output :exports results :cache yes
+print("Frequentist:")
+print(mle)
+print("Bayesian")
+print(poste)
+#+end_src
+\color{black}
+* A little demotivation
+** Most Biologists are "Agnostic Bayesians"
+- \textbf{Frequentist} vs. \textbf{Bayesian}: often nearly identical 
+- only true for: i) certain "priors", and ii) large-samples sizes
+- key point: \textbf{Be a Master of Priors!}
+* Bayesians vs. Frequentism
+** Philosophy
+- Bayesians: condition on the data, $\theta$ is random
+think like a gambler
+- Frequentism: data is random 
+think: had we repeated the experiment, we would get different data
+** Practical differences?
+mostly, no. BUT, some important situations...
+- priors!
+- low-sample sizes, complex models
+- missing data
+- 'optional stopping' 
+* Posterior Density
+** Posterior: the goal of Bayesian analysis...
+- hard to evaluation
+- Enter \textbf{Baye's Rule}!
+\begin{center}
+$p(\theta\vert Y) = \frac{p(Y\vert \theta)p(\theta)}{\int p(Y\vert \theta)p(\theta) d \theta}$
+\end{center}
+** Posterior $\propto$ Likelihood x Prior 
+- \emph{likelihood}: easy to evaluate
+- \emph{prior}: express as easy distribution (Norm, Gamma, Beta)
+** Priors
+defn: "your belief about $\theta$ before observing data", or "a probability distribution about $\theta$ before observing data"
+* Posterior $\propto$ Likelihood x Prior 
+- The posterior: a mixture of "information in the data" (likelihood) and "information in the prior"
+- \textbf{be a master or priors}
+It is your responsibility to study and know how to express prior information in probabilitistic terms
+* Posterior $\propto$ Likelihood x Prior 
+#+begin_src R :session *R* :results output graphics :file priors1.png :width 700 :height 500 :exports results
+par(mfrow=c(3,1),mgp=c(2,0.7,0),mar=c(3.5,2,0,0))
+mu.mle=175; sd.true=2.5; 
+# plot1: vague prior
+mu.pr=165;sd.pr=35
+# likelihood
+curve(dnorm(x, mu.mle, sd=sd.true),from = 120, to=220, col="red", lwd=2, ylab="", xlab=expression(theta),cex=1.3)
+# prior vague
+curve(dnorm(x, mu.pr, sd=sd.pr), from=120, to=220, col="blue", add=TRUE, lwd=2)
+text(x=130,y=dnorm(mu.mle, mu.mle, sd=sd.true), labels="vague prior", cex=1.7, col="blue",pos=1)
+# posterior
+post.func <- function(x,v,v0,mu,mu0){ dnorm(x,v0/(v+v0)*mu+ v/(v+v0)*mu0, sd=sqrt(1/(1/v0+1/v))) } 
+#curve(post.func(x,sd.true^2,sd.pr^2,mu.mle,mu.pr), from=120, to=220, col="black", add=TRUE, lwd=2,lty=2)
+legend(x="topright",legend=c("prior","likelihood","posterior"),lwd=c(2,2,2),lty=c(1,1,2),col=c("blue","red","black"),bty="n")
+
+# plot2: honest
+sd.pr=12
+# likelihood
+curve(dnorm(x, mu.mle, sd=sd.true),from = 120, to=220, col="red", lwd=2, ylab="", xlab=expression(theta),cex=1.3)
+# prior vague
+curve(dnorm(x, mu.pr, sd=sd.pr), from=120, to=220, col="blue", add=TRUE, lwd=2)
+text(x=130,y=dnorm(mu.mle, mu.mle, sd=sd.true), labels="informative/honest prior", cex=1.7, col="blue",pos=1)
+# posterior
+post.func <- function(x,v,v0,mu,mu0){ dnorm(x,v0/(v+v0)*mu+ v/(v+v0)*mu0, sd=sqrt(1/(1/v0+1/v))) } 
+#curve(post.func(x,sd.true^2,sd.pr^2,mu.mle,mu.pr), from=120, to=220, col="black", add=TRUE, lwd=2,lty=2)
+
+# plot 3: strong
+sd.pr=2.5
+# likelihood
+curve(dnorm(x, mu.mle, sd=sd.true),from = 120, to=220, col="red", lwd=2, ylab="", xlab=expression(theta),cex=1.3)
+# prior vague
+curve(dnorm(x, mu.pr, sd=sd.pr), from=120, to=220, col="blue", add=TRUE, lwd=2)
+text(x=130,y=dnorm(mu.mle, mu.mle, sd=sd.true), labels="strong", cex=1.7, col="blue",pos=1)
+# posterior
+post.func <- function(x,v,v0,mu,mu0){ dnorm(x,v0/(v+v0)*mu+ v/(v+v0)*mu0, sd=sqrt(1/(1/v0+1/v))) } 
+#curve(post.func(x,sd.true^2,sd.pr^2,mu.mle,mu.pr), from=120, to=220, col="black", add=TRUE, lwd=2,lty=2)
+
+#+end_src
+Competing information: priors vs. likelihood
+
+* Posterior $\propto$ Likelihood x Prior 
+#+begin_src R :session *R* :results output graphics :file priors2.png :width 700 :height 500 :exports results
+par(mfrow=c(3,1),mgp=c(2,0.7,0),mar=c(3.5,2,0,0))
+mu.mle=175; sd.true=2.5; 
+# plot1: vague prior
+mu.pr=165;sd.pr=35
+# likelihood
+curve(dnorm(x, mu.mle, sd=sd.true),from = 120, to=220, col="red", lwd=2, ylab="", xlab=expression(theta),cex=1.3)
+# prior vague
+curve(dnorm(x, mu.pr, sd=sd.pr), from=120, to=220, col="blue", add=TRUE, lwd=2)
+text(x=130,y=dnorm(mu.mle, mu.mle, sd=sd.true), labels="vague prior", cex=1.7, col="blue",pos=1)
+# posterior
+post.func <- function(x,v,v0,mu,mu0){ dnorm(x,v0/(v+v0)*mu+ v/(v+v0)*mu0, sd=sqrt(1/(1/v0+1/v))) } 
+curve(post.func(x,sd.true^2,sd.pr^2,mu.mle,mu.pr), from=120, to=220, col="black", add=TRUE, lwd=3,lty=2)
+legend(x="topright",legend=c("prior","likelihood","posterior"),lwd=c(2,2,2),lty=c(1,1,2),col=c("blue","red","black"),bty="n")
+# plot2: honest
+sd.pr=12
+# likelihood
+curve(dnorm(x, mu.mle, sd=sd.true),from = 120, to=220, col="red", lwd=2, ylab="", xlab=expression(theta),cex=1.3)
+# prior vague
+curve(dnorm(x, mu.pr, sd=sd.pr), from=120, to=220, col="blue", add=TRUE, lwd=2)
+text(x=130,y=dnorm(mu.mle, mu.mle, sd=sd.true), labels="informative/honest prior", cex=1.7, col="blue",pos=1)
+# posterior
+post.func <- function(x,v,v0,mu,mu0){ dnorm(x,v0/(v+v0)*mu+ v/(v+v0)*mu0, sd=sqrt(1/(1/v0+1/v))) } 
+curve(post.func(x,sd.true^2,sd.pr^2,mu.mle,mu.pr), from=120, to=220, col="black", add=TRUE, lwd=3,lty=2)
+
+# plot 3: strong
+sd.pr=2.5
+# likelihood
+curve(dnorm(x, mu.mle, sd=sd.true),from = 120, to=220, col="red", lwd=2, ylab="", xlab=expression(theta),cex=1.3)
+# prior vague
+curve(dnorm(x, mu.pr, sd=sd.pr), from=120, to=220, col="blue", add=TRUE, lwd=2)
+text(x=130,y=dnorm(mu.mle, mu.mle, sd=sd.true), labels="strong", cex=1.7, col="blue",pos=1)
+# posterior
+post.func <- function(x,v,v0,mu,mu0){ dnorm(x,v0/(v+v0)*mu+ v/(v+v0)*mu0, sd=sqrt(1/(1/v0+1/v))) } 
+curve(post.func(x,sd.true^2,sd.pr^2,mu.mle,mu.pr), from=120, to=220, col="black", add=TRUE, lwd=3,lty=2)
+
+#+end_src
+Competing information: priors vs. likelihood
+* Types of Priors
+** non-informative priors
+- desire Posterior estimates similar to MLE
+- deliberately ignore prior knowledge
+- Jeffrey's priors
+** 'Subjective Bayes'
+- honest representation of your actual knowledge
+- inference: how the data (via likelihood) updates Prior -> Posterior
+** Strong Priors
+- computational reasons
+- 'fixing' parameters to a certain value
+- non-identifiability of parameter
+* Types of Priors
+** Know the distributions and their parameters
+#+CAPTION: rjags Plummer 2015
+#+NAME:   fig:foo
+file://home/rob/Documents/school/Murdoch/MURUG/tutorials/bayesian/distr.jpg
+* Types of Priors
+** Know the distributions and their parameters
+Familiarize yourself with distributions: plot it, calculate some statistics
+- Beta distribution example
+#+begin_src R :session *R* :results output :exports code
+r <- rbeta(10000, 0.5, 0.5)
+#+end_src
+
+#+begin_src R :session *R* :results output graphics :file beta.jpg :width 400 :height 200 :exports results
+par(mfrow=c(2,2),mgp=c(2,0.7,0),mar=c(3.5,2,0,0))
+hist(rbeta(10000,0.5,0.5),main="",xlab="",col="grey70"); 
+hist(rbeta(10000,1,1),main="",xlab="",col="grey70");
+hist(rbeta(10000,5,1),main="",xlab="",col="grey70");
+hist(rbeta(10000,5,5),main="",xlab="",col="grey70");
+#+end_src
+
+* Bayesian Analysis Example
+Time to open up R and JAGS
+** 'JAGS: Just Another Gibbs Sampler'
+Uses BUGS-like syntax (similar to OpenBUGS, WinBUGS)
+- rjags Package: R friendly JAGS interface
+- easy easy easy Bayesian inference
+Don't worry about 'samplers': JAGS does the hard work
+- specify \textbf{likelihood} (how the data arose) and the \textbf{priors}
+* Bayesian Analysis Example
+example model: height of 20 Australian
+
+\color{blue}
+#+begin_src R :session *R* :results output :exports both :cache yes
+y <- c(183.46, 182.32, 178.31, 181.36, 165.12, 
+185.68, 170.47, 178.11, 174.86, 182.03, 180.09, 
+172.88, 177.94, 177.26, 182.58, 171, 173.74, 177.78, 
+180.02, 163.05)
+#+end_src
+\color{black}
+ - lets estimate the mean height (mu) and the dispersion (sigma)
+\begin{small}
+JAGS we estimate the 'precision' (tau): $\tau=\frac{1}{\sigma^2}$
+\end{small}
+#+ATTR_LATEX: :center :width 0.4\textwidth 
+#+CAPTION: Prof Mike Jordan lecture notes
+ file://home/rob/Documents/school/Murdoch/MURUG/tutorials/bayesian/graph.png
+
+* Bayesian Analysis Example 1
+- open up R angs rjags
+- download and open the R file:
+* Bayesian Analysis Example 1
+Jags model syntax: specify priors and likelihood
+#+begin_src R :session *R* :results output :exports code
+model.txt<-'model{
+ # Normal priors on mean height
+ mu0 <- 100 
+ sigma0 <- 35
+ tau0 <- pow(sigma0,-2)
+ mu ~ dnorm(mu0,tau0) 
+ # Gamma prior on precision
+ alpha0 <- 0.1
+ beta0 <- 0.1
+ tau ~ dgamma(alpha0,beta0)
+ # Likelihood: how the data arose
+ for(i in 1:length(y)){
+   y[i] ~ dnorm(mu,tau) T(0,) # truncated normal
+ }
+ sigma <- pow(tau,-0.5)
+}'
+#+end_src
+* Sample-based inference
+** Posteriors
+often no 'analytical' solution to $P(\theta\vert Y)$
+** Solution: Sampling
+- it is a Probability Distribution!!!
+- find a way to "sample" from posterior.
+- with enough samples: mean(samples) = Posterior Expectation
+** Sampling Algorithms
+MCMC; Gibbs Sampling; Metropolis-Hastings; Slice-Sampling; Importance Sampling; "Conjugate Priors"; conditional probability
+- all (sub)algorithms or concepts or techniques to help sample a posterior
+
+* Approximate the joint-posterior distribution"
+** example: estimate mean and variance of $\theta$
+$\theta_{\text{true}}=3.44$; $\text{Var}(\theta)_{\text{true}}=4.89$
+#+begin_src R :session *R* :results output graphics :file samples1.png :width 700 :height 500 :exports results
+par(mfrow=c(2,2),mar=c(0.1,0.1,1,0),bty="l")
+r<-rnorm(10,mean=3.4444,sd=sqrt(4.8888));
+hist(r,main="10 samples",xaxt="n",ylab="",xlab="",yaxt="n",col="grey80")
+text(x=mean(r),y=0, labels=paste("est. mean:",round(mean(r),2),", est. var:",round(var(r),2)),pos=3,cex=1.5,col="red")
+r<-rnorm(30,mean=3.4444,sd=sqrt(4.8888));
+hist(r,main="30 samples",xaxt="n",ylab="",xlab="",yaxt="n",col="grey80")
+text(x=mean(r),y=0, labels=paste("est. mean:",round(mean(r),2),", est. var:",round(var(r),2)),pos=3,cex=1.5,col="red")
+r<-rnorm(100,mean=3.4444,sd=sqrt(4.8888));
+hist(r,main="100 samples",xaxt="n",ylab="",xlab="",yaxt="n",col="grey80")
+text(x=mean(r),y=0, labels=paste("est. mean:",round(mean(r),2),", est. var:",round(var(r),2)),pos=3,cex=1.5,col="red")
+r<-rnorm(3000,mean=3.4444,sd=sqrt(4.8888));
+hist(r,main="3000 samples",xaxt="n",ylab="",xlab="",yaxt="n",col="grey80")
+text(x=mean(r),y=0, labels=paste("est. mean:",round(mean(r),2),", est. var:",round(var(r),2)),pos=3,cex=1.5,col="red")
+#+end_src
+
+* Gibbs Sampling
+break-down joint posterior into (simpler) conditional distributions
+- difficult: sampling $P(\beta_0,\beta_1,\beta_2,\sigma^2\vert Y)$
+- easy: sampling $P(\beta_0,\beta_1,\beta_2,\vert\sigma^2, Y)$ then $P(\sigma^2\vert\beta_0,\beta_1,\beta_2,Y)$ then repeat
+approximates the joint posterior
+** algorithm
+- initialize: $\beta_0^{(0)},\beta_1^{(0)},\beta_2^{(0)},\sigma^{2(0)}$
+\begin{equation}
+\begin{aligned}
+\{\beta_0^{(1)},\beta_1^{(1)},\beta_2^{(1)}\} &\ \sim P(\beta \vert \sigma^{2(0)},Y) \\
+\sigma^{2(1)} &\ \sim P(\sigma^2 \vert \beta_0^{(1)},\beta_1^{(1)},\beta_2^{(1)},Y) \\
+\{\beta_0^{(2)},\beta_1^{(2)},\beta_2^{(2)}\} &\ \sim P(\beta \vert \sigma^{2(1)},Y) \\
+\sigma^{2(2)} &\ \sim P(\sigma^2 \vert \beta_0^{(2)},\beta_1^{(2)},\beta_2^{(2)},Y)
+\end{aligned}
+\end{equation}
+- repeat 1000's or 1000000 's times
+
+* BUGS to the rescue
+Previously, Bayesian analysis demanded custom-coding MCMC algorithms
+** WinBUGS & OpenBUGS & JAGS
+automatically use appropriate sampling techniques; so we don't have to worry
+** BUT you must: Monitor the MCMC!
+- give reasonable \textbf{initial values}
+- ensure \textbf{convergence}: no trend; independent chains give same answer
+- ensure adequate \textbf{mixing}: independent samples
+* MCMC: Good mixing
+#+ATTR_LATEX: :center 
+ file://home/rob/Documents/school/Murdoch/MURUG/tutorials/bayesian/mcmc_goodmix.jpg
+* MCMC: Poor convergence
+#+ATTR_LATEX: :center 
+ file://home/rob/Documents/school/Murdoch/MURUG/tutorials/bayesian/mcmc_goodbad.jpg
+* MCMC
+** MCMC parameters in JAGS
+- n.chains: num. of MCMC chains; more is better
+- n.adapt: discard first samples; let algorithm 'adapt'
+- n.burn: discard extra samples; allow algorithm to reach startionary distribution 
+- n.iter: total number of sample; more is better
+- thin: take every $k^{th}$ iteration for a sample; decorrelates one sample from the next; higher is better
+- total samples: number of samples to approximate your Posterior; target at least 2000 to 5000 
+* MCMC: what to do with bad mixing
+- run longer chains
+- ensure long enough adaption phase
+- misspecified priors
+- bad initial values?
+* Advantages of Bayesian Inference
+- inference statesments: easy to understand (only Bayesians can make probabilistic statements about $\theta$)
+- small sample sizes: exact inference
+- missing data: very easy to impute
+- integrate other information, or calculate 'derived parameters'
+** Hierarchical Bayesian
+- model dependences (space & time)
+- "random-effects" models
+- "model-selection" / "model-multi inference" (AIC, Lasso, etc., are just types of Bayesian models)
+- shrinkage: deflate influence of outlier values
+
+* Where to go from here?
+** some Bayesian learning resources
+- learn about prior distributions!
+- great R package for learning the fundamentals of Gibbs sampling, MCMC, conditional probability, etc. 
+\verb!LearnBayes: Functions for Learning Bayesian Inference! See the Vignettes. https://cran.r-project.org/web/packages/LearnBayes/index.html
+- OpenBUGS examples: read and run yourself
+http://www.openbugs.net/w/Examples
+- Textbook: WinBUGs for Ecologists, Marc Kery
+- Blog: Andrew Gelman: http://andrewgelman.com/
+** Frequentism
+- Excellent and accessible video lecture by Michael Jordan
+http://videolectures.net/mlss09uk_jordan_bfway/
+- 
+

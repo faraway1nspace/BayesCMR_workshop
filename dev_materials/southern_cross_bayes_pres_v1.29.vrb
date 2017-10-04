@@ -1,0 +1,25 @@
+\frametitle{Posterior Estimation vs Maximum Likelihood Estimation}
+\begin{center}
+\includegraphics[width=0.6\textwidth,height=0.6\textheight]{loglike.eps}
+\end{center}
+\begin{itemize}
+\item frequentist point estimates: \texttt{glm(y\textasciitilde{}1)}
+\end{itemize}
+\small
+\begin{center}
+\begin{tabular}{rrrr}
+MLE & se & 95CI-low & 95CI-hi\\
+172.3 & 1.48 & 169.4 & 175.17\\
+\end{tabular}
+\end{center}
+\begin{itemize}
+\item compare to (approximate)\footnote{some error due to Monte-Carlo approximation of the posterior.} Posterior descriptive statistics
+\end{itemize}
+\small
+\begin{center}
+\begin{tabular}{rrrr}
+E[\(\theta\)] & SD & 95CI-low & 95CI-hi\\
+172.21 & 1.51 & 169.21 & 175.16\\
+\end{tabular}
+\end{center}
+nearly the same

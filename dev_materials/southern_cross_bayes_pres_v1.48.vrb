@@ -1,0 +1,16 @@
+\frametitle{Bayesian Analysis Example}
+example model: height of 20 Australian
+\color{blue}
+\texttt{y <- c(183.46, 182.32, 178.31, 181.36, 165.12, 185.68, 170.47, 178.11, 174.86, 182.03, 180.09, 172.88, 177.94, 177.26, 182.58, 171, 173.74, 177.78, 180.02, 163.05)}
+\color{black}
+\begin{itemize}
+\item lets estimate the mean height (mu) and the dispersion (sigma)
+\end{itemize}
+\begin{small}
+JAGS we estimate the 'precision' (tau): $\tau=\frac{1}{\sigma^2}$
+\end{small}
+\begin{figure}[htbp]
+
+\includegraphics[width=0.4\textwidth]{//home/rob/Documents/school/Murdoch/MURUG/tutorials/bayesian/graph.png}
+\caption{Prof Mike Jordan lecture notes}
+\end{figure}

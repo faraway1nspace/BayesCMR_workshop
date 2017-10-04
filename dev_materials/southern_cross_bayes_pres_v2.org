@@ -1,0 +1,491 @@
+#+TITLE: Introduction to Bayesian Inference
+#+AUTHOR: Rob W Rankin 
+#+LATEX_HEADER: \institute{Post-doc (Georgetown University),PhD (Murdoch University)}
+#+EMAIL: robertw.rankin@gmail.com
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [presentation,9pt,xcolor=dvipsnames]
+#+OPTIONS: -:t toc:f
+#+LATEX_HEADER: \usepackage{tikz}
+#+LATEX_HEADER: \usepackage{color}
+#+LATEX_HEADER: \usepackage{xcolor}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage{cancel}
+#+LATEX_HEADER: \usepackage{graphicx}
+#+LATEX_HEADER: \usetheme[height=7mm]{Rochester}
+#+LATEX_HEADER: \usecolortheme[named=Green]{structure}
+#+LATEX_HEADER: \usetikzlibrary{shapes,arrows}
+#+DESCRIPTION: 
+#+KEYWORDS: 
+# TODO: insert: distinction between frequentist philosophy (intervals, alpha and beta) and Bayesian (probability) (like after all the great things about posterior inference)
+# TODO: insert 
+* themes
+see more themes in /usr/share/texlive/texmf-dist/tex/latex/beamer/themes/theme
+* outline
+\begin{tikzpicture}
+  \foreach \x /\alph/\name in {0/a/History, 51/b/Why?, 103/c/Bayes\\Theorem, 154/d/Philosophy, 206/e/Priors and\\Probabilities, 257/f/Properties, 309/g/Sample-Base\\Approximation}{
+    \node[circle, fill=green,minimum width=15mm, draw, font=\tiny, align=center,shading=axis,top color=orange,bottom color =orange!50!black] (\alph) at (\x:3cm) {\name}; }
+
+  \foreach \alpha in {a,b,c,d,e,f,g}%
+           {%
+             \foreach \alphb in {a,b,c,d,e,f,g}
+                      {
+                        \draw (\alpha) -- (\alphb);%
+                      }
+           }
+\end{tikzpicture}
+* Why?
+Why are you interested in Bayesianism?
+* Why? -- some advantages
+** Things Ecologist say...
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.55
+:END:
+- small sample sizes: exact inference
+- missing data: easy to impute
+- integrate other information
+- derived quantities
+- complex, hierarchical process models
+multiple sources of variation (space,time)
+``honest" epistemology
+** Theoretical 
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.45
+:END:
+- conditional on the observed data 
+- probabilistic statements
+- evidential 
+- coherence, decision making
+- good frequentist properties
+-- shrinkage, decision-theory
+- model selection
+* Why? -- disadvantages
+- what is probability (basing inference on something that doesn't exist!!!)?
+- objective basis for science?
+- misalignment: probability theory and human psychology
+- biased (towards the prior)\footnote{A Bayesian would claim that given a prior, it would be irrational to believe in anything other than the posterior.}
+- language dependence
+* History
+** Neo Bayesian Revival (>1992)
+Gelfand and Smith 1992 - Sampled based approximations of Bayesian posteriors \footnote{MCMC is older, e.g. Metrpolis et al. }
+** Revival (~1920s - ) 
+Subjective Bayesian, Decision Theory
+- Ramsey (1926)
+- De Finetti (1937) 
+- Savage (1954)
+- (Wald, 1939, 1954)
+Hypothesis Testing, Logical/Objective Bayesism
+- Jeffreys (1939)
+- Jaynes (2003)
+Hierarchical Bayesian
+- Good (1953,65)
+Relationship to Compact Coding Theory
+- Rissasen (1978), Wallace (1968)
+Prediction
+- Dawid, Watanabe
+* History - Frequentism's Ascendency
+** Frequentist ``lethal blow"\footnote{S. Zabell 1989}
+Rallied against use of prior probabilities in statistical inference
+- Sir Ronald A. Fisher (1925,1935,...)
+Maximum likelihood, significance tesing, ANOVA, sufficiency, randomized experiments \\
+/Inductive inference/
+- Jerzy Neyman & Egon Pearson (1933)
+Hypothesis testing, confidence intervals, Type-I/II error rates\\
+/Inductive Behaviour/
+** Philosophical developments
+- Karl Popper (1959,1963) and *Falsificationism*
+Anti-Induction: scientific progress is by *falsifying* theories, only
+* History - Frequentism's Ascendency
+frequentists:
+- reject probabilistic confirmation of models \footnote{Some use the AICc for model confirmation}
+- reject Bayesian notions of probability
+- frequentists care about /good frequency properties/ 
+Estimation: unbiased, efficiency, obtain minimum variance\\
+Hypothesis testing: Type-I error rates, most powerful tests\footnote{Neyman-Pearson-type testing, not Fisherians}
+** Frequencies as probabilities
+- probabilities only meaningful as long-run frequencies of events
+\begin{equation}\mathbf{Y}\colon\{H,T,H,H,H,T,H,T,T,H,T,H,T,\dots\}\end{equation}
+- The probability of flipping a coin and getting a head is... 
+\begin{equation}p(y=\text{Head})\equiv \lim_{n\rightarrow\infty}\frac{1}{n}\sum_i^n \mathbb{I}[y_i\!=\!\text{Head}] \end{equation}
+the mean counts of heads in the long-run
+* History - Hypotheses
+** _Frequentism_
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.55
+:END:
+*** Fisher's p-value
+- continuous index of evidence *against* a hypothesis $H$
+- *NEVER* prove a hypothesis $H$, only disprove
+*** Neyman-Pearson $\alpha$ and $\beta$
+- long-run error rates of Type-I and Type-II
+- *bound* Type-I at $\alpha\leq0.05$ and hopefully maximize power ($1-\beta$) with high $n$ and most powerful tests
+- never confirm a hypothesis: only *act* so as to ``not be wrong too often"
+** _Bayesians_
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.45
+:END:
+*** Model probabilities
+probabilistic confirmation of hypotheses
+- $p(H_k$\vert Y)$ what is the probability of Hypothesis $H_k$ given the data?
+*** Bayes Factors
+evidence in favour of one hypothesis over another
+- $BF=\frac{p(Y\vert H_1)}{p(Y\vert H_2)}$.
+find hypothesis that is more likely to be true
+* History - Inverse Probability
+from late 1700's to ~1920's: _Method of Inverse Probability_,the bread and butter of applied analyses
+- Rev. Thomas Bayes (1778)
+- Simone-Pierre Laplace (1774)
+** Bayes
+``PROBLEM: Given the number of times in which an unknown event ($y\in[0,1]$) has happened and failed: Required the *chance* that the probability of its happening in a single trial lies between any two degrees of probability that can be named... By /chance/ I mean the same as /probability/."
+- /probability/ of a /probability/: $p(\theta\vert y)$
+- two types of probabilities
+** Laplace
+developed Bayes Theorem close to its modern form:
+\begin{equation}
+\overbrace{p(\theta\vert Y)}^{\text{posterior}} = \frac{\overbrace{p(\theta)}^{\text{prior}}\overbrace{\mathcal{L}(Y\vert \theta)}^{\text{likelihood}}}{\underbrace{\int_\theta p(\theta)\mathcal{L}(Y\vert \theta)d\theta}_{\text{marginal likelihood}}} 
+\end{equation}
+* Bayes' Legacy
+Bayes great innovation: two types of probability
+** Probability of an /observable/ event Y:
+$p(y\!=\!\text{Head}) \equiv \theta$
+- \theta is /like a parameter in a model/ 
+- $p(y\!=\!\text{Head}\vert \theta) = \text{Bern}(y;\theta)\rightarrow\text{What we now call a likelihood}$
+- how the data was generated: $y\sim\text{Bern}(\theta)$
+** Probability distribution for the /parameter/ $p(\theta)$
+for inference...
+- *Before data*: $p(\theta)$ (the /prior/ probability distribution)
+- *After data*: $p(\theta\vert Y)$ (the /posterior/ probability distribution)
+* Bayes Theorem
+- conditional probability: want a probability distribution $p(\theta\vert y)$ conditional on observed data $y$ -> need a likelihood $f(Y\vert \theta)$ and prior probability distribution $p(\theta)$.
+\begin{equation}
+\begin{aligned}
+p(\theta\vert Y) & = \frac{p(\theta)\mathcal{L}(Y\vert \theta)}{\int_\theta p(\theta)\mathcal{L}(Y\vert \theta)d\theta} 
+\text{where} & \dots \\
+ p(\theta) & \equiv\text{prior information (before the data)} \\
+\mathcal{L}(Y\vert\theta)& \equiv\ \text{likelihood (information from the data)} \\
+p(\theta\vert Y) & \equiv\text{distibuion of}\ \theta\ \text{after the  data} \\
+\text{denominator}:&\ \cancel{\text{marginal likelihood}}\text{(often ignore)}\\
+\text{more common form...} & \\
+p(\theta\vert Y) & \propto \mathcal{L}(Y\vert \theta)p(\theta) \\
+\end{aligned}\footnote{marginal likelihood ignored when using sample-based approximation}
+\end{equation}
+- posterior is a mixture of information in *prior* and *likelihood*
+* Bayesian Conditionalization
+- posterior is a mixture of information in *prior* and *likelihood*
+\begin{tikzpicture}[node distance = 3cm, auto]
+  \node at (0,0) [rectangle, fill=blue, draw, text width=4.5em, align=center,shading=axis](likelihood){observe data};
+  \node[circle, fill=blue, draw, text width=4.5em, align=center,shading=axis, left of = likelihood](prior){before data};
+  \node[circle, fill=blue, draw, text width=4.5em, align=center,shading=axis, right of = likelihood](posterior){after data};
+  \path [draw, -latex'] (prior) -- (likelihood); %
+  \path [draw, -latex'] (likelihood) -- node{update} (posterior);
+  \node[rectangle, draw, text width=4.5em, align=center,below of=likelihood,opacity=0.01,text opacity=1](likelabel){Likelihood};
+  \node[rectangle, draw, text width=4.5em, align=center,below of=prior,opacity=0.01,text opacity=1](priorlabel){Prior};
+  \node[rectangle, draw, text width=4.5em, align=center,below of=posterior,opacity=0.01,text opacity=1](postlabel){Posterior};    
+\end{tikzpicture}
+* What's in a Posterior
+** Mixture of information
+- $\mathcal{L}(Y\vert\theta)$: Likelihood, specified by model. Similar between Bayesian and non-Bayesian analyses\footnote{Frequentists reserve the term likelihood for a function of $\theta$ for fixed y, whereas Bayesians consider ``joint probability density of the data" given $\theta$.}  
+- $p(\theta)$ ... where do they come from?
+** How to specify priors (HUGE topic)
+- a previous posterior distribution
+- elicitation from experts, previous studies
+- Priors as degrees-of-beliefs: \textbf{Subjectivist/personalist} Bayesians
+- Default prior and reference priors: \textbf{Objective/logical} Bayesians
+- adhoc
+* Posterior Inference (for estimation $\theta$)
+- Probabilistic statements about abstract quantity ($\theta$) (\emph{only} Bayesians can do)
+- Posterior probability necesarily depends on a \emph{prior}
+``to make an Omelette, you must crack a few eggs" (Savage)
+** The joy of Posterior Inference
+can make statements like...
+- what is the probability that $\theta>0$? 
+- what is the most probable value of $\theta$? (\textcolor{red}{MAP})
+- what is the expected value of $\theta$? (\textcolor{red}{posterior mean})
+- what is a \emph{high probability region} of $\theta$ (\textcolor{red}{Q\% credibility interval})
+* Posterior Inference (estimation example)
+** Example 1:
+- men's height, n=20 observations.
+- $y_i\sim\mathcal{N}(175,10^2)$
+~y <- c(183.46, 182.32, 178.31, 181.36, 165.12, 185.68, 170.47, 178.11, 174.86, 182.03, 180.09, 172.88, 177.94, 177.26, 182.58, 171, 173.74, 177.78, 180.02, 163.05)~
+- estimate $\theta=[\mu,\sigma^2]$: mean population height and variance
+- priors:  $p(\mu)=\mathcal{N}(0,90^2),\ p(\sigma^2)=\mathcal{IG}(0.1,0.1)$
++ specify a likelihood: $\mathcal{L}(\mathbf{y}\vert\mu,\sigma^2)=\prod_i^n\mathcal{N}(y_i; \mu,\sigma^2)$
+** \emph{now run a Gibbs sampler to approximate the posterior} $p(\mu,\sigma^2\vert \mathbf{y})\dots$
+* Why are Posteriors so Great!
+- IS a probability distribution
+#+ATTR_LaTeX: :width 0.6\textwidth :height 0.6\textheight
+[[file:posterior1.eps]]
+- easy to interpret
+* Why are Posteriors so Great!
+- IS a probability distribution
+#+ATTR_LaTeX: :width 0.6\textwidth :height 0.6\textheight
+[[file:posterior2.eps]]
+- Posterior mode: most probable value
+- Posterior mean $\mathbb{E}[\theta]=\int p(\theta\vert Y)\theta d\theta$: expected value
+* Why are Posteriors so Great!
+- IS a probability distribution
+#+ATTR_LaTeX: :width 0.6\textwidth :height 0.6\textheight
+[[file:posterior3.eps]]
+- Posterior mode: most probable value
+- Posterior mean $\mathbb{E}[\theta]=\int p(\theta\vert Y)\theta d\theta$: expected value
+- 95%CI of $\theta$
+* Why are Posteriors so Great!
+- IS a probability distribution
+#+ATTR_LaTeX: :width 0.6\textwidth :height 0.6\textheight
+[[file:posterior4.eps]]
+- Posterior mode: most probable value
+- Posterior mean $\mathbb{E}[\theta]=\int p(\theta\vert Y)\theta d\theta$: expected value
+- What is the probability that $\theta>X$? Area of $p(\theta\vert Y)>X$
+* Posterior Estimation vs Maximum Likelihood Estimation
+Bayesian vs. frequentist estimates: compare posteriors to maximum-likelihood method
+** method of maximum likelihood
+- Choose $\theta$ such that we \emph{maximize} the likelihood ($\mathcal{L}$) of seeing $\mathbf{y}$
+- *interpretation* "It would be very (un)likely to see the data that I saw, if the value of $\theta$ were X"
+- Most common method among Frequentists (single model estimation)
+- $\hat{\theta}_\text{MLE}$ is \textcolor{red}{NOT} the "most probabilty value of $\theta$
+- *optimality*: unbaised, efficient \footnote{but see shrinkage estimators for high-dimensional problems}
+* Posterior Estimation vs Maximum Likelihood Estimation
+#+ATTR_LaTeX: :width 0.6\textwidth :height 0.6\textheight
+[[file:loglike.eps]]
+- frequentist point estimates: ~glm(y~1)~
+#+Latex: \small
+| MLE| se| 95CI-low | 95CI-hi|
+|172.3 | 1.48| 169.4| 175.17    |
+- compare to (approximate)\footnote{some error due to Monte-Carlo approximation of the posterior.} Posterior descriptive statistics
+#+Latex: \small
+|E[$\theta$]| SD| 95CI-low|95CI-hi|
+|172.21| 1.51| 169.21| 175.16 |
+nearly the same
+* Posterior Inference (estimation example 2)
+** Example 2:
+- survival $[0=\text{died},1=\text{survived}]$, $n=30$ observations.
+- $s_i\sim\text{Bern}(0.9)$
+~s <- c(1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1)~
+- estimate $\theta=[\phi]$: mean population survival
+- priors:  $p(\phi)=\text{Beta}(1,1)$
+- specify a likelihood: $\mathcal{L}(\mathbf{s}\vert\phi,n_s)=\prod_s^n\text{Bern}(s_i; \phi,n_s)$
+*now run a Gibbs sampler to approximate the posterior* $p(\phi\vert \mathbf{s})$
+* Posterior density
+#+ATTR_LaTeX: :width 0.6\textwidth :height 0.6\textheight
+[[file:posterior_s3.eps]]
+* Posterior density
+#+ATTR_LaTeX: :width 0.6\textwidth :height 0.6\textheight
+[[file:posterior_s4.eps]]
+* Posterior inference: cost functions
+What if you have a ``cost function" $g(phi)$?
+e.g., cost of conservation action conditional on the estimated values of $\phi$?
+#+ATTR_LaTeX: :width 0.7\textwidth :height 0.7\textheight
+[[file:surv_cost_func.eps]]
+* Posterior inference: cost functions
+#+ATTR_LaTeX: :width 0.7\textwidth :height 0.7\textheight
+file:surv_cost_est.eps
+$\mathbb{E}[\text{COST}] = \int_0^1g(\phi)p(\phi\vert s)d\phi$
+- full cost including all uncertainty in $\phi$
+* Posterior Estimation vs Maximum Likelihood Estimation
+How do Bayesian posterior estimates compared to more-familiar (frequentist) point-estimates based on maximum likelihood?
+** method of maximum likelihood
+- Most common method among Frequentists (single model estimation)
+- "It would be very (un)likely to have seen the data that I saw, if the value of $\theta$ were X"
+- Choose $\theta$: that which \emph{maximize's} the likelihood of seeing $\mathbf{y}$
+- $\hat{\theta}_\text{MLE}$ is \textcolor{red}{NOT} the "most probabilty value of $\theta$
+- optimality properties: unbaised, efficient \footnote{but see shrinkage estimators for high-dimensional problems}
+* Posterior Estimation vs Maximum Likelihood Estimation
+#+ATTR_LaTeX: :width 0.6\textwidth :height 0.6\textheight
+[[file:loglike.eps]]
+- frequentist point estimates: ~glm(y~1)~
+#+Latex: \small
+| MLE| se| 95CI-low | 95CI-hi|
+|172.3 | 1.48| 169.4| 175.17    |
+- compare to (approximate)\footnote{some error due to Monte-Carlo approximation of the posterior.} Posterior descriptive statistics
+#+Latex: \small
+|E[$\theta$]| SD| 95CI-low|95CI-hi|
+|172.21| 1.51| 169.21| 175.16 |
+nearly the same
+
+* Posterior Estimation vs Maximum Likelihood Estimation
+** for $n$ getting *LARGE*, and for *WEAK* priors
+- Posterior Mode $\theta_{\text{MAP}}\rightarrow\hat{\theta}_{\text{MLE}}$
+- Posterior Confidence Intervals $\rightarrow$ Confidence Intervals
+** for *low* $n$ and/or for *STRONG* priors
+- shrinkage:  $\theta\rightarrow\text{Prior expectation}$.
+- Posterior mean $\bar{\theta}$ is ``biased" towards the priors
+** role of priors (from an estimation perspective)
+- Priors retard/accerlate rate of convergence of $\bar{\theta}\rightarrow\text{truth}$
+- At low samples-sizes, ``sensible" priors induce \emph{shrinkage} and have better estimation properties than MLEs
+- *Key POINTS*: you must be a master of prior distributions.
+* Posteriors and Sample Size
+#+ATTR_LaTeX: :width 0.78\textwidth :height 0.78\textheight
+file:priorinfro.eps
+* Posteriors and Prior information
+#+ATTR_LaTeX: :width 0.78\textwidth :height 0.78\textheight
+file:priorinfro_2a.eps
+* Posteriors and Prior information
+#+ATTR_LaTeX: :width 0.78\textwidth :height 0.78\textheight
+file:priorinfro_2b.eps
+* Priors
+** Most Biologists are reluctant Bayesians
+- \textbf{Frequentist} vs. \textbf{Bayesian}: often desire that point estimates are identical between posteriors and MLEs
+- *but*, only for: i) weak priors, and ii) large-samples sizes
+- key point: \textbf{Be a Master of Priors!}
+* Priors and Philosophy of Probabilities
+*** Subjective Personalist Bayesians
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.4
+:END:
+Probabilities are your ``degree of belief"
+- priors: prior beliefs
+- posteriors: bring your beliefs into alignment with posterior
+- *decision making*
+*** Objective Logical Bayesians
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.6
+:END:
+Probabilities are continuous extension of Aristolean logic, deductive
+- Probabilities capture ``degree of truth"
+- Priors: non-informative, set by *default* (Jeffrey's Priors, reference priors, language-invariant priors)
+e.g., $p(\phi)=\text{Beta}(0.5,0.5)$ (Jeffrey's Prior)
+** 
+- Elicit priors from previous studies (posterior becomes new prior)
+* Priors and Philosophy of Probabilities
+** Instrumentalist
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.4
+:END:
+priors useful for good estimation properties
+- shrinkage, efficiency 
+** Frequentist
+:PROPERTIES:
+:BEAMER_env: block
+:BEAMER_col: 0.6
+:END:
+Principal principle: ``probabilities ($p(\text{Event})$) should align with long-run frequencies of Event"
+- probabilities do not exist in reality
+** Other
+- Quantum mechanics
+- Propensities (Karl Popper)
+* Probability Distributions in JAGS/BUGS
+- you must express your prior information *probabilitistically*
+** Know the distributions and their parameters (JAGS Manual)
+[[file://home/rob/Documents/school/Murdoch/MURUG/tutorials/bayesian/distr.jpg]]
+* Intuiting Probability Distributions
+- easy to learn in ~R~ \\
+e.g., $r\sim\text{Beta}(a,b)$ \\
+~r <- rbeta(10000, 0.5, 0.5)~
+#+ATTR_LaTeX: :width 0.78\textwidth :height 0.78\textheight
+[[file:beta.eps]]
+* Sample-based inference
+** Posteriors
+often no 'analytical' solution to $(\theta\vert Y)$
+** Solution: *Sampling*
+- it is a Probability Distribution!!!
+- find a way to sample from posterior
+- with enough samples: mean(samples) = Posterior Expectation
+assuming $\theta_j\sim p(\theta\vert y)\ \text{for}\ j=1,\dots,J$
+| Expected Value    | $=\int\theta p(\theta\vert y)d\theta$ | $\approx\frac{1}{J}\sum_j^J\theta_j$ |
+| Standard Error$(\theta)$   | $=SE(\theta)$ | $\approx SD(\theta_j)$ |
+| Probability $\theta>0$   | $=\int\mathbb{I}[\theta>0]p(\theta\vert y)d\theta$ | $\approx\frac{1}{J}\sum_j^J\mathbb{I}[\theta_j>0]$ |
+
+** Sampling Algorithms
+MCMC; Gibbs Sampling; Metropolis-Hastings; Slice-Sampling; Importance Sampling; "Conjugate Priors";
+* Approximate the joint-posterior distribution"
+** example: estimate mean and variance of $\theta$
+$\theta_{\text{true}}=3.44$; $\text{Var}(\theta)_{\text{true}}=4.89$
+[[file:sample_approximations.eps]]
+* Gibbs Sampling
+break-down joint posterior into (simpler) conditional distributions
+- difficult: sampling $P(\beta_0,\beta_1,\beta_2,\sigma^2\vert Y)$
+- easy: sampling $P(\beta_0,\beta_1,\beta_2,\vert\sigma^2, Y)$ then $P(\sigma^2\vert\beta_0,\beta_1,\beta_2,Y)$ then repeat
+approximates the joint posterior
+** algorithm
+- initialize: $\beta_0^{(0)},\beta_1^{(0)},\beta_2^{(0)},\sigma^{2(0)}$
+\begin{equation}
+\begin{aligned}
+\{\beta_0^{(1)},\beta_1^{(1)},\beta_2^{(1)}\} &\ \sim P(\beta \vert \sigma^{2(0)},Y) \\
+\sigma^{2(1)} &\ \sim P(\sigma^2 \vert \beta_0^{(1)},\beta_1^{(1)},\beta_2^{(1)},Y) \\
+\{\beta_0^{(2)},\beta_1^{(2)},\beta_2^{(2)}\} &\ \sim P(\beta \vert \sigma^{2(1)},Y) \\
+\sigma^{2(2)} &\ \sim P(\sigma^2 \vert \beta_0^{(2)},\beta_1^{(2)},\beta_2^{(2)},Y)
+\end{aligned}
+\end{equation}
+- repeat 1000's or 1000000 's times
+* BUGS to the rescue
+Previously, Bayesian analysis demanded custom-coding MCMC algorithms
+** WinBUGS & OpenBUGS & JAGS
+automatically use appropriate sampling techniques; so we don't have to worry
+** BUT you must: Monitor the MCMC!
+- give reasonable \textbf{initial values}
+- ensure \textbf{convergence}: no trend; independent chains give same answer
+- ensure adequate \textbf{mixing}: independent samples
+* MCMC: Good mixing
+#+ATTR_LATEX: :center 
+ file://home/rob/Documents/school/Murdoch/MURUG/tutorials/bayesian/mcmc_goodmix.jpg
+* MCMC: Poor convergence
+#+ATTR_LATEX: :center 
+ file://home/rob/Documents/school/Murdoch/MURUG/tutorials/bayesian/mcmc_goodbad.jpg
+* MCMC
+** MCMC parameters in JAGS
+- ~n.chains~: num. of MCMC chains; more is better
+- ~n.adapt~: discard first samples; let algorithm 'adapt'
+- ~n.burn~: discard extra samples; allow algorithm to reach stationary distribution 
+- ~n.iter~: total number of sample; more is better
+- ~thin~: take every $k^{th}$ iteration for a sample; decorrelates one sample from the next; higher is better
+- total samples: number of samples to approximate your Posterior; target at least 2000 to 5000 
+* MCMC: what to do with bad mixing
+- run longer chains
+- ensure long enough adaption phase
+- misspecified priors
+- bad initial values?
+
+* Bayesian Analysis Example
+Time to open up R and JAGS
+- go to website: ~colugos.blogspot.com~
+** 'JAGS: Just Another Gibbs Sampler'
+Uses BUGS-like syntax (similar to OpenBUGS, WinBUGS)
+- ~rjags~ Package: R friendly JAGS interface
+- easy easy *easy* Bayesian /estimation/ 
+- not so easy for /model selection/
+Don't worry about 'samplers': JAGS does the hard work
+- specify \textbf{likelihood} (how the data arose) and the \textbf{priors}
+* Bayesian Analysis Example
+example model: height of 20 Australian
+\color{blue}
+~y <- c(183.46, 182.32, 178.31, 181.36, 165.12, 185.68, 170.47, 178.11, 174.86, 182.03, 180.09, 172.88, 177.94, 177.26, 182.58, 171, 173.74, 177.78, 180.02, 163.05)~
+\color{black}
+ - lets estimate the mean height (mu) and the dispersion (sigma)
+\begin{small}
+JAGS we estimate the 'precision' (tau): $\tau=\frac{1}{\sigma^2}$
+\end{small}
+#+ATTR_LATEX: :center :width 0.4\textwidth 
+#+CAPTION: Prof Mike Jordan lecture notes
+ file://home/rob/Documents/school/Murdoch/MURUG/tutorials/bayesian/graph.png
+
+* Bayesian Analysis Example 1
+- open up R and ~rjags~
+- download and open the R file:
+
+* Bayesian Analysis Example 1
+Jags model syntax: specify priors and likelihood \\
+#+begin_src R :results output :exports code
+model.txt<-`model{
+ # Normal priors on mean height
+ mu0 <- 100 
+ sigma0 <- 35
+ tau0 <- pow(sigma0,-2)
+ mu ~ dnorm(mu0,tau0) T(0,) # truncated normal
+ # Gamma prior on precision
+ alpha0 <- 0.1
+ beta0 <- 0.1
+ tau ~ dgamma(alpha0,beta0)
+ # Likelihood: how the data arose
+ for(i in 1:length(y)){
+   y[i] ~ dnorm(mu,tau) T(0,) # truncated normal
+ }
+ sigma <- pow(tau,-0.5)
+}'
+#+end_src
+

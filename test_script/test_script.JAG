@@ -1,0 +1,8 @@
+model{
+# priors
+phi ~ dbeta(pr.a, pr.b)
+# likelihood
+for(i in 1:length(y)){
+   y[i] ~ dbern(phi)
+} # i 
+}
