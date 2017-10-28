@@ -1,0 +1,67 @@
+model{
+# mean capture probability on logit scale (for females)
+logit.p.mu ~dnorm(pr.logit.p.mu[1],pr.logit.p.mu[2])
+# effect of effort
+logit.p.effort ~dnorm(pr.logit.p.effort[1],pr.logit.p.effort[2])
+# sex effect (for males and unknowns)
+for(x in 1:(n.sex-1)){
+  logit.p.sex[x] ~ dnorm(pr.logit.p.sex[x,1],pr.logit.p.sex[x,2])
+}
+# combine mean, sex, and effort effects into a single p (time-varying)
+for(t in 1:(T-1)){
+   # females 
+   p[t,1] <- 1/(1+exp(-1*(logit.p.mu + EFFORT[t]*logit.p.effort))) # inverse logit transformation
+   for(x in 1:(n.sex-1)){
+     # for males and unknowns
+     p[t,x+1] <- 1/(1+exp(-1*(logit.p.mu + logit.p.sex[x] + EFFORT[t]*logit.p.effort))) # ilogit
+   }
+}
+for(x in 1:n.sex){ # loop through sexes
+  # logit normal survival
+  logit.phi[x] ~ dnorm(pr.logit.phi[x,1],pr.logit.phi[x,2])
+  phi[x] <- 1/(1+exp(-logit.phi[x])) # logit transformation
+  # FROM alive to...
+  tr[1,1,x] <- phi[x]   # alive
+  tr[2,1,x] <- 1-phi[x] # dead
+  # FROM dead to ...
+  tr[1,2,x] <- 0 # alive (illegal)
+  tr[2,2,x] <- 1 # dead to dead
+}
+# HMM EMISSION MATRIX
+for(x in 1:n.sex){
+  for(t in 1:(T-1)){
+    # state 1: alive
+    em[1,1,t,x]<-1-p[t,x] # miss
+    em[2,1,t,x]<- p[t,x]  # capture
+    # state 2: dead 
+    em[1,2,t,x]<- 1  # miss
+    em[2,2,t,x]<- 0  # capture
+  } # t
+} # sex
+# latent proces
+for(i in 1:n){
+  # HMM LATENT STATE PROCESS: at t=1
+  z[i,first[i]+1] ~ dcat(tr[,1,sex.v[i]]) # initialize state 1 (alive)
+  # loop though capture periods after first capture
+  for(t in (first[i]+1):(T-1)){
+     z[i,t+1] ~ dcat(tr[,z[i,t],sex.v[i]]) # z_t | z_t-1
+  } # t
+}# i 
+# conditional likelihood
+for(i in 1:n){
+  # loop though capture periods after first capture
+  for(t in (first[i]+1):T){
+     y[i,t] ~ dcat(em[,z[i,t],t-1,sex.v[i]])
+  } # t
+} # i
+# Abundance estimate: horvitz-type estimator: n_obs 
+for(t in 2:T){ # loop through time
+  for(x in 1:n.sex){ # loop through sex
+    for(i in 1:n){ # loop through individuals
+      N_i[i,t-1,x] <- equals(sex.v[i],x)*equals(y[i,t],2)/p[t-1,sex.v[i]]
+    } # i
+    # tally estimate for sex x at time t (offset by -1)
+    N[t-1,x] <- sum(N_i[,t-1,x]) # sum over all individuals of sex x
+   } # x
+} # t
+}

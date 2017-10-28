@@ -3,6 +3,7 @@
 
 # set windows directory to CRLF
 *WINDOWS.R text eol=crlf
+*windows.R text eol=crlf
 
 # Denote binaries
 *.png binary
