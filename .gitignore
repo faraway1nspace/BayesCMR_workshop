@@ -2,6 +2,7 @@
 .Rhistory
 .Rapp.history
 .JAG
+.sty
 
 # Emacs temp files
 *~

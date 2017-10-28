@@ -2,26 +2,18 @@ model{
 # PRIORS
 p ~ dbeta(pr.p[1], pr.p[2]) # prior on capture history
 phi ~ dbeta(pr.phi[1], pr.phi[2]) # prior on survival
-for(t in 1:T){
-  psi[t] ~ dbeta(pr.psi[t,1], pr.psi[t,2]) # prior on recruitment
-}
-# HMM TRANSITION MATRIX
-# FROM unborn (col1) to...
-for(t in 1:T){
-tr[1,1,t] <- 1-psi[t] # unborn to unborn
-tr[2,1,t] <- psi[t]   # unborn to alive
-tr[3,1,t] <- 0     # (illegal)
+psi ~ dbeta(pr.psi[1], pr.psi[2])
+tr[1,1] <- 1-psi # unborn to unborn
+tr[2,1] <- psi   # unborn to alive
+tr[3,1] <- 0     # (illegal)
 # FROM alive (col2) to...
-tr[1,2,t] <- 0     # (illegal)
-tr[2,2,t] <- phi   # alive to alive
-tr[3,2,t] <- 1-phi # alive to dead
+tr[1,2] <- 0     # (illegal)
+tr[2,2] <- phi   # alive to alive
+tr[3,2] <- 1-phi # alive to dead
 # FROM dead (col3) to...
-tr[1,3,t] <- 0     # (illegal)
-tr[2,3,t] <- 0     # (illegal)
-tr[3,3,t] <- 1     # dead to dead
-}
-# HMM EMISSION MATRIX
-# state 1: unborn (100% no capture)
+tr[1,3] <- 0     # (illegal)
+tr[2,3] <- 0     # (illegal)
+tr[3,3] <- 1
 em[1,1]<-1  
 em[2,1]<-0  
 # state 2: alive
@@ -30,16 +22,12 @@ em[2,2]<-p
 # state 3: dead (100% no capture)
 em[1,3]<-1  
 em[2,3]<-0
-# HMM LATENT STATE PROCESS: at t=1
-for(i in 1:M){
-  z[i,1] ~ dcat(tr[,1,1]) # initialize state 1 
+z[1] ~ dcat(tr[,1]) # initialize state 1 
 # CONDITIONAL LIKELIHOOD: at t=1
-  y[i,1] ~ dcat(em[,z[i,1]]) # conditional capture
-# loop though capture periods > 1
-  for(t in 2:T){
-     z[i,t] ~ dcat(tr[,z[i,t-1],t]) # z_t | z_t-1
-     # CONDITIONAL LIKELIHOOD: for t>1
-     y[i,t] ~ dcat(em[,z[i,t]]) # conditional capture
-   } # t
- }# M
+y[1] ~ dcat(em[,z[1]])
+for(t in 2:T){
+   z[t] ~ dcat(tr[,z[t-1]]) # z_t | z_t-1
+   # CONDITIONAL LIKELIHOOD: for t>1
+   y[t] ~ dcat(em[,z[t]]) # conditional capture
+} # t
 }

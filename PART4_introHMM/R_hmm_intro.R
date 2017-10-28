@@ -165,6 +165,7 @@ setwd(???)
 
 # the data
 y<-read.table(file = "fake_popan_data.txt",sep=",")
+# windows people: y<-read.table(file = "fake_popan_data_windows.txt",sep=",")
 T<-ncol(y) # number of capture periods
 
 # PRIORS (on psi,phi,p)

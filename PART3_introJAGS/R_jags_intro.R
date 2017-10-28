@@ -76,7 +76,7 @@ phi.se <- sqrt(var(post.matrix[,"phi"]))
 phi.density<-density(post.matrix[,"phi"])
 phi.MAP <- phi.density$x[which.max(phi.density$y)]
 
-# plot the results
+# plot the poist estimates
 plot(phi.density,main=expression(phi))
 abline(v=phi.MAP,col="blue") # MAP
 abline(v=phi.mean,col="red") # expected value

@@ -85,12 +85,5 @@ cumprob.norm <- sum(cumprob[1:T])
 for(t in 1:T){ 
    pent[t] <- cumprob[t]/cumprob.norm 
 } #t
-# loglike: for WAIC estimation (conditional loglikelkhood, unfortunately)
-for(i in 1:N.obs){
-  for(t in 1:T){
-     llit[i,t] <- logdensity.cat(y[i,t], em[1:E, z[i,t],t])
-  } # t primary periods
-  lli[i] <- sum(llit[i,1:T])
-} # individuals N.obs
 }
 
