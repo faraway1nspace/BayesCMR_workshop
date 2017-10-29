@@ -319,9 +319,9 @@ jags.txt <-"model{
 "
 # save jags text/code in object jags.txt.3 to local disk as a file to import into external program JAGS
 modname <- "JAGS_hierarchical_pcrd.JAG"
-sink(file=modname) # this creates a new file called 'JAGS_HierBayes.JAG'
-cat(jags.txt,fill=TRUE) # this places the text from object jags.txt.3 into file JAGS_HierBayes.JAG
-sink() # this cloes the connection to file 'JAGS_HierBayes.JAG'
+sink(file=modname) # this creates a new file called '"JAGS_hierarchical_pcrd.JAG"
+cat(jags.txt,fill=TRUE) # this places the text from object jags.txt
+sink() # this cloes the connection to file 
 
 # HYPERPRIORS: half-student-t (tau (precision, nu (degrees-of-freedom))
 pr.sigma.p.t<-c(0.05^(-2), 3)
