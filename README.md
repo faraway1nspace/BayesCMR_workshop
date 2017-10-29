@@ -6,7 +6,7 @@ Welcome to the SMM2017 workshop on Bayesian Capture-recapture. This page contain
 OUTLINE
 -------
 
-![workshop outline](https://raw.githubusercontent.com/faraway1nspace/BayesCMR_workshop/img/outline.png)
+[[https://github.com/faraway1nspace/BayesCMR_workshop/blob/master/img/outline.png|alt=outline]]
 
 INSTALLATION
 ------------
