@@ -1,5 +1,12 @@
 # Bayesian Capture-Recapture in JAGS: Workshop for SMM 2017 Biennial Conference
-Welcome to the SMM2017 workshop on Bayesian Capture-recapture. This page will contain materials used during the full-day workshop.
+Welcome to the SMM2017 workshop on Bayesian Capture-recapture. This page contains materials for the full-day workshop, including
+- 8 lectures and tutorials
+- R and JAGS code
+
+OUTLINE
+-------
+
+![workshop outline)(img/outline.png)
 
 INSTALLATION
 ------------
@@ -10,10 +17,6 @@ Participants should first:
 
 
 The workshop is based heavily on the publication: <b>[Rankin RW, Nicholson K, Allen SJ, Krützen M, Bejder L, Pollock KH. 2016. A full-capture Hierarchical Bayesian model of Pollock's Closed Robust Design and application to dolphins. Frontiers in Marine Science 3:25, doi: 10.3389/fmars.2016.00025](http://journal.frontiersin.org/article/10.3389/fmars.2016.00025)</b>.
-
-
-Stay tuned for more materials!
-------------------------------
 
 Sincerely, \\
 Robert W. Rankin, Dr. \\
