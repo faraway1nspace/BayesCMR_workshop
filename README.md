@@ -7,6 +7,8 @@ The focus of the workshop was to introduce [JAGS](http://www.google.com/url?q=ht
 
 Feel free to submit feature requests and report issues in the Github issue tracker page (see link above)
 
+A special thanks to those researchers who let us their odontocetes capture-recapture data-set for some of the practical exercises, including Dr. Tim Hunt (*Humpback dolphins*, POPAN, Part 6), Krista Nicholson (*Bottlenose dolphins*, PCRD, Part 7), and Dr. Daniele Cagnazzi (*Humpback dolphins*, MSCRD, Part 8, unpublished). These data-sets are detailed in their respective publications: [Hunt et al](http://www.int-res.com/abstracts/esr/v32/p71-88/), [Nicholson et al](http://www.int-res.com/abstracts/esr/v32/p71-88/), and unpublished data from Cagnazzi (but see his [Doctoral Thesis](http://epubs.scu.edu.au/theses/344/)). 
+
 OUTLINE
 -------
 
@@ -27,11 +29,8 @@ This was a simple exercise for participants to study some common probability dis
 PART 3: Introduction to JAGS
 ----------------------------
 This part included 3 exercises to familiarize participants with the JAGS syntax and R workflow. The emphasis in on i) encoding prior beliefs and ii) encoding the likelihood (joint probability distribution of the data), together which serve as the basic skeleton for all subsequent JAGS models. There are three JAGS exercises in the [R file](./PART3_introJAGS/) as part of this section:
-foo the [R file](PART3_introJAGS/)
-foo the [R file](PART3_introJAGS)
-foo  [R file](./master/PART3_introJAGS)
-- a simple Bernoulli model for average annual survival of 30 dolphins (with Beta Priors)
-- a Bernoulli model for average annual survival of 30 dolphins (with logit-Normal priors)
+- a simple Bernoulli model for average annual survival of 30 dolphins (with *Beta* Priors)
+- a Bernoulli model for average annual survival of 30 dolphins (with *logit-Normal* priors)
 - a logistic-regression of average annual survival of 30 dolphins (with logit-Normal priors)
 
 See the notes at the end of the PDF from Part 1. 
@@ -39,12 +38,12 @@ See the notes at the end of the PDF from Part 1.
 PART 4: Intro to Hidden Markov Models, a Unifying Framework for CMR
 -------------------------------------------------------------------
 
-This tutorial shows how the CJS, POPAN, PCRD, and MSCRD are just variants of a more general Hidden-Markov Model. Participants learn about how to specify <b>transmission matrices</b> and <b>emission matrices</b> in the JAGS syntax as well as the rationale behind<b>latent state markov process</b> and the <b>complete data likelihood</b> to recast a variety of CMR models as HMMs. 
-- exercise 1 is to run a simple HMM (like a POPAN model) for a single capture-history, then
-- exercise 2 generalizes the HMM for multiple capture histories and time-varying parameters, then
-- exercise 3 add's POPAN-like derivatives to the JAGS script (Super-population, population abundance births, and probability of entry)
+This tutorial shows how the CJS, POPAN, PCRD, and MSCRD are just variants of a more general Hidden-Markov Model. Participants learn about how to specify <b>transmission matrices</b> and <b>emission matrices</b> in the JAGS syntax as well as the rationale behind the <b>latent state markov process</b> and the <b>complete data likelihood</b> to recast a variety of CMR models as HMMs. 
+1. exercise 1 is to run a simple HMM (like a POPAN model) for a single capture-history, then
+2. exercise 2 generalizes the HMM for multiple capture histories and time-varying parameters, then
+3. exercise 3 add's POPAN-like derivatives to the JAGS script (Super-population, population abundance births, and probability of entry)
 
-See the lecture PDF
+See the [lecture PDF](https://github.com/faraway1nspace/BayesCMR_workshop/blob/master/PART4_introHMM/hmm_intro.pdf) and the [PDF describing the tutorials](https://github.com/faraway1nspace/BayesCMR_workshop/blob/master/PART4_introHMM/hmm_practical.pdf). The R code is in [PART 4 directory](./PART4_introHMM/).
 
 
 
