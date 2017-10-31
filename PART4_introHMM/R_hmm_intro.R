@@ -208,7 +208,6 @@ em[2,2]<-p
 # state 3: dead (100% no capture)
 em[1,3]<-1  
 em[2,3]<-0
-
 # HMM LATENT STATE PROCESS: at t=1
 for(i in 1:M){
   z[i,1] ~ dcat(tr[,1,1]) # initialize state 1 

@@ -1,12 +1,41 @@
 # Bayesian Capture-Recapture in JAGS: Workshop for SMM 2017 Biennial Conference
-Welcome to the SMM2017 workshop on Bayesian Capture-recapture. This page contains materials for the full-day workshop, including
+Welcome to the SMM2017 workshop on Bayesian Capture-recapture. This page contains materials from the full-day workshop, including
 - 8 lectures and tutorials
 - R and JAGS code
+
+The focus of the workshop was to introduce [JAGS](http://www.google.com/url?q=http://mcmc-jags.sourceforge.net/&sa=U&ved=0ahUKEwjf38Gb6tXWAhUIVLwKHejnA2EQFggdMAQ&usg=AOvVaw3VPi0Ffru14OG--3erpJZh) for Bayesian Capture-Mark-Recapture (including models CJS, POPAN, PCRD, MSCRD as a more general type of Hidden Markov Model). The underlying idea is based on the work of Rankin and Nicholson et al. 2016 Paper and Rankin's 2017 Ph.D. thesis. The general public may find the lectures and R code useful to make their own  CJS, POPAN, PCRD, and MSCRD models in JAGS. 
 
 OUTLINE
 -------
 
 ![Outline](/img/outline.png)
+
+PART 1: History, Philosophy and Properties of Bayesian Inference
+----------------------------------------------------------------
+
+A brief introduction to Bayesianism, in general. PDF presentation [here](http://foo.bar). No R/JAGS code 
+
+
+PART 2: Introduction to Priors and Probabilities
+------------------------------------------------
+
+This was a simple exercise for participants to study some common probability distributions available in [JAGS](http://www.google.com/url?q=http://mcmc-jags.sourceforge.net/&sa=U&ved=0ahUKEwjf38Gb6tXWAhUIVLwKHejnA2EQFggdMAQ&usg=AOvVaw3VPi0Ffru14OG--3erpJZh). A PDF lecture is here. A few helpful R functions are available here. 
+
+
+PART 3: Introduction to JAGS
+----------------------------
+This part included 3 exercises to familiarize themselves with the JAGS syntax and R workflow:
+- a simple Bernoulli model for average annual survival of 30 dolphins (with Beta Priors)
+- a Bernoulli model for average annual survival of 30 dolphins (with logit-Normal priors)
+- a logistic-regression of average annual survival of 30 dolphins (with logit-Normal priors)
+
+See the exercise notes at the end of the PDF from Part 1
+
+PART 4: Intro to Hidden Markov Models, a Unifying Framework for CMR
+-------------------------------------------------------------------
+
+
+
 
 INSTALLATION
 ------------
