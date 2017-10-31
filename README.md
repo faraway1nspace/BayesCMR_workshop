@@ -26,7 +26,10 @@ This was a simple exercise for participants to study some common probability dis
 
 PART 3: Introduction to JAGS
 ----------------------------
-This part included 3 exercises to familiarize participants with the JAGS syntax and R workflow. The emphasis in on i) encoding prior beliefs and ii) encoding the likelihood (joint probability distribution of the data), together which serve as the basic skeleton for all subsequent JAGS models. There are three JAGS exercises in the [R file](tree/master/PART3_introJAGS) as part of this section:
+This part included 3 exercises to familiarize participants with the JAGS syntax and R workflow. The emphasis in on i) encoding prior beliefs and ii) encoding the likelihood (joint probability distribution of the data), together which serve as the basic skeleton for all subsequent JAGS models. There are three JAGS exercises in the [R file](./PART3_introJAGS/) as part of this section:
+foo the [R file](PART3_introJAGS/)
+foo the [R file](PART3_introJAGS)
+foo  [R file](./master/PART3_introJAGS)
 - a simple Bernoulli model for average annual survival of 30 dolphins (with Beta Priors)
 - a Bernoulli model for average annual survival of 30 dolphins (with logit-Normal priors)
 - a logistic-regression of average annual survival of 30 dolphins (with logit-Normal priors)
@@ -35,10 +38,13 @@ See the notes at the end of the PDF from Part 1.
 
 PART 4: Intro to Hidden Markov Models, a Unifying Framework for CMR
 -------------------------------------------------------------------
-This tutorial shows how the CJS, POPAN, PCRD, and MSCRD are just variants of a more general Hidden-Markov Model. Participants learn about how to specif
-- 
 
-how to run a simple HMM (like a POPAN model) in JAGS for a single observation, then work to generalize the 
+This tutorial shows how the CJS, POPAN, PCRD, and MSCRD are just variants of a more general Hidden-Markov Model. Participants learn about how to specify <b>transmission matrices</b> and <b>emission matrices</b> in the JAGS syntax as well as the rationale behind<b>latent state markov process</b> and the <b>complete data likelihood</b> to recast a variety of CMR models as HMMs. 
+- exercise 1 is to run a simple HMM (like a POPAN model) for a single capture-history, then
+- exercise 2 generalizes the HMM for multiple capture histories and time-varying parameters, then
+- exercise 3 add's POPAN-like derivatives to the JAGS script (Super-population, population abundance births, and probability of entry)
+
+See the lecture PDF
 
 
 
