@@ -66,7 +66,14 @@ See the [lecture PDF](./PART5_CJS/cjs.pdf) and [R/JAGS tutorial files](./PART5_C
 
 PART 6: POPAN and Model-Selection
 ---------------------------------
-This section revisits the simple three-state POPAN model, using data from [Hunt et al](http://www.int-res.com/abstracts/esr/v32/p71-88/). Part 1 of the lecture ([popan.pdf](./PART6_POPAN/popan.pdf)) discusses POPAN in detail, whereas Part 2 of the lecture ([popan2.pdf](./PART6_POPAN/popan2.pdf)) addresses Bayesian model selection according to a philosophical positions: predictive criteria (such the WAIC) versus athe prequentialist/Bayes Factor criteria. See the R file `R_popan.R`.
+This section revisits the simple three-state POPAN model, using data from [Hunt et al](http://www.int-res.com/abstracts/esr/v32/p71-88/). Part 1 of the lecture ([popan.pdf](./PART6_POPAN/popan.pdf)) discusses POPAN in detail, whereas Part 2 of the lecture ([popan2.pdf](./PART6_POPAN/popan2.pdf)) addresses Bayesian model selection according to two philosophical positions: predictive criteria (such the WAIC) versus athe prequentialist/Bayes Factor approach. See the R file `R_popan.R`.
+
+**Key concepts and techniques**:
+- parameter-expansion and data-augmentation
+- pseudo-individuals
+- derivatives (population abundance, births, etc.)
+- Watanabe-Akaike Information Criterion (WAIC) for minimizing a predictive loss
+- The marginal likelihood and Bayes Factors for finding the highest posterior model
 
 PART 7: Pollock's Closed Robust Design, and Hierarchical Bayes
 --------------------------------------------------------------
