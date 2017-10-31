@@ -41,7 +41,7 @@ PART 4: Hidden Markov Models, a Unifying Framework for CMR
 This tutorial shows how the CJS, POPAN, PCRD, and MSCRD are just variants of a more general Hidden-Markov Model. Participants learn about how to specify transmission matrices and emission matrices in the JAGS syntax as well as the rationale behind the latent state markov process and the complete data likelihood to recast a variety of CMR models as HMMs. 
 1. exercise 1 is to run a simple HMM (like a POPAN model) for a single capture-history, then
 2. exercise 2 generalizes the HMM for multiple capture histories and time-varying parameters, then
-3. exercise 3 add's POPAN-like derivatives to the JAGS script (Super-population, population abundance births, and probability of entry)
+3. exercise 3 adds POPAN-like derivatives to the JAGS script (Super-population, population abundance births, and probability of entry)
 
 See the [lecture PDF](https://github.com/faraway1nspace/BayesCMR_workshop/blob/master/PART4_introHMM/hmm_intro.pdf) and the [PDF describing the tutorials](https://github.com/faraway1nspace/BayesCMR_workshop/blob/master/PART4_introHMM/hmm_practical.pdf). The R code is in [PART 4 directory](./PART4_introHMM/).
 
@@ -53,7 +53,7 @@ See the [lecture PDF](https://github.com/faraway1nspace/BayesCMR_workshop/blob/m
 PART 5: Cormack-Jolly-Seber as a HMM
 ------------------------------------
 
-This tutorial introduces the idea of *conditioning on the first capture* and re-casts the CJS model as a very simple HMM. Capture recapture data is from [Nicholson et al](http://dx.doi.org/10.1071/MF12210). Also discussed are the Horvitz-Thompson estimator of abundance, as well as using the linear-model specification to include individual and temporarl covariates in capture-probabilities (e.g., for individual heterogeneity, sex, and effort information)
+This tutorial introduces the idea of *conditioning on the first capture* and re-casts the CJS model as a very simple HMM. Capture recapture data is from [Nicholson et al](http://dx.doi.org/10.1071/MF12210). Also discussed are the Horvitz-Thompson estimator of abundance, as well as using the linear-model specification to include individual and temporal covariates in capture-probabilities (e.g., for individual heterogeneity, sex, and effort information)
 
 See the [lecture PDF](./PART5_CJS/cjs.pdf) and [R/JAGS tutorial files](./PART5_CJS/) especially the file `R_cjs.R`.
 
@@ -66,7 +66,7 @@ See the [lecture PDF](./PART5_CJS/cjs.pdf) and [R/JAGS tutorial files](./PART5_C
 
 PART 6: POPAN and Model-Selection
 ---------------------------------
-This section revisits the simple three-state POPAN model, using data from [Hunt et al](http://www.int-res.com/abstracts/esr/v32/p71-88/). Part 1 of the lecture ([popan.pdf](./PART6_POPAN/popan.pdf)) discusses POPAN in detail, whereas Part 2 of the lecture ([popan2.pdf](./PART6_POPAN/popan2.pdf)) addresses Bayesian model selection according to two philosophical positions: predictive criteria (such the WAIC) versus athe prequentialist/Bayes Factor approach. See the R file `R_popan.R`.
+This section revisits the simple three-state POPAN model, using data from [Hunt et al](http://www.int-res.com/abstracts/esr/v32/p71-88/). Part 1 of the lecture ([popan.pdf](./PART6_POPAN/popan.pdf)) discusses POPAN in detail, whereas Part 2 of the lecture ([popan2.pdf](./PART6_POPAN/popan2.pdf)) addresses Bayesian model selection according to two philosophical positions: predictive criteria (such the WAIC) versus the prequentialist/Bayes Factor approach. See the R file `R_popan.R`.
 
 **Key concepts and techniques**:
 - parameter-expansion and data-augmentation
@@ -77,7 +77,7 @@ This section revisits the simple three-state POPAN model, using data from [Hunt 
 
 PART 7: Pollock's Closed Robust Design, and Hierarchical Bayes
 --------------------------------------------------------------
-This tutorial introduces the Kendall model for temporary emigration and the Pollock's Closed Robust Design. See the [lecture PDF](./PART7_PCRD/pcrd.pdf) and [R/JAGS tutorial files](./PART7_PCRD/), espcially the file called `R_pcrd.R`.
+This tutorial introduces the Kendall model for temporary emigration and the Pollock's Closed Robust Design. See the [lecture PDF](./PART7_PCRD/pcrd.pdf) and [R/JAGS tutorial files](./PART7_PCRD/), especially the file called `R_pcrd.R`.
 
 **Key concepts and techniques**:
 - secondary periods and population-closure
@@ -85,10 +85,10 @@ This tutorial introduces the Kendall model for temporary emigration and the Poll
 - Hierarchical Bayes and random-effects
 - hyperpriors and shrinkage
 
-PART 9: Multistrata Close Robust Design
+PART 8: Multistrata Close Robust Design
 ---------------------------------------
 
-This simply showcases an actual JAGS script from a current study using the MSCRD to model a population of Humpback dolphins in Australia. The key-point is that, although seemingly complex, this model has basically the same structure as all the previous models (transmission and emission matrices, etc.). See the R file `R_example_mscrd_cagn.R`.
+This section showcases an actual JAGS working script from a current study using the MSCRD to model a population of Humpback dolphins in Australia. The key-point is that, although seemingly complex, this model has basically the same structure as all the previous models (transmission and emission matrices, etc.). See the R file `R_example_mscrd_cagn.R`.
 
 
 INSTALLATION
