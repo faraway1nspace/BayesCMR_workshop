@@ -26,16 +26,19 @@ This was a simple exercise for participants to study some common probability dis
 
 PART 3: Introduction to JAGS
 ----------------------------
-This part included 3 exercises to familiarize themselves with the JAGS syntax and R workflow:
+This part included 3 exercises to familiarize participants with the JAGS syntax and R workflow. The emphasis in on i) encoding prior beliefs and ii) encoding the likelihood (joint probability distribution of the data), together which serve as the basic skeleton for all subsequent JAGS models. There are three JAGS exercises as part of this section:
 - a simple Bernoulli model for average annual survival of 30 dolphins (with Beta Priors)
 - a Bernoulli model for average annual survival of 30 dolphins (with logit-Normal priors)
 - a logistic-regression of average annual survival of 30 dolphins (with logit-Normal priors)
 
-See the exercise notes at the end of the PDF from Part 1
+See the notes at the end of the PDF from Part 1. 
 
 PART 4: Intro to Hidden Markov Models, a Unifying Framework for CMR
 -------------------------------------------------------------------
+This tutorial shows how the CJS, POPAN, PCRD, and MSCRD are just variants of a more general Hidden-Markov Model. Participants learn about how to specif
+- 
 
+how to run a simple HMM (like a POPAN model) in JAGS for a single observation, then work to generalize the 
 
 
 

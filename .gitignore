@@ -1,8 +1,8 @@
 # R History files
 .Rhistory
 .Rapp.history
-.JAG
-.sty
+*.JAG
+*.sty
 
 # Emacs temp files
 *~

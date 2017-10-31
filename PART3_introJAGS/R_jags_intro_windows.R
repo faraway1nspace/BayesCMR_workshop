@@ -54,11 +54,16 @@ n.iter <- 10000 # number of MCMC iterations per chain
 thin_ <- 10 # thin the chain to reduce auto-correlation
 
 # COMPILE THE JAGS MODEL
-m <- jags.model(file = jags.model.file,data=jags.data, inits = jags.inits.f, n.chains=n.chains, n.adapt=n.adapt)
+m <- jags.model(file = jags.model.file,
+                data=jags.data,
+                inits = jags.inits.f,
+                n.chains=n.chains,
+                n.adapt=n.adapt)        #
 # BURN-IN PHASE
-update(m,n.burn)
+update(m,n.burn*100)
 # GET POSTERIOR SAMPLES
-post <- coda.samples(model=m, variable.names = c("phi"), n.iter=n.iter, thin=thin_)
+post <- coda.samples(model=m,
+                     variable.names = c("phi"), n.iter=n.iter, thin=thin_)
 # (optional) collapse the three chains into a chain matrix
 post.matrix <- do.call("rbind",post)
 
@@ -76,7 +81,7 @@ phi.se <- sqrt(var(post.matrix[,"phi"]))
 phi.density<-density(post.matrix[,"phi"])
 phi.MAP <- phi.density$x[which.max(phi.density$y)]
 
-# plot the results
+# plot the poist estimates
 plot(phi.density,main=expression(phi))
 abline(v=phi.MAP,col="blue") # MAP
 abline(v=phi.mean,col="red") # expected value
@@ -91,12 +96,14 @@ library(rjags)
 y <- c(1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1)
 
 # PRIOR: Beta distribution of phi, with shape1 and shape2
-pr.phi <- ??????????
+pr.logit.phi <- c(mean = logit(0.9) , precision =  1/(0.2)^2)
 
 # jags model syntax
+    
 jags.txt <- "model{
 # priors
-phi ~ ????????????????
+logit.phi ~ dnorm(pr.logit.phi[1], pr.logit.phi[2])
+phi <- 1/(1+exp(-logit.phi)) # inverse-logit transf.
 # likelihood
 for(i in 1:length(y)){ # loop through each observation
   y[i] ~ dbern(phi)
@@ -111,15 +118,14 @@ sink() # close the connection
 # collect the jags data: a named list
 jags.data <- list(
     y = y,
-    pr.phi = pr.phi
+    pr.logit.phi = pr.logit.phi
     )
 # jags expects the list to have names corresponding to all the data-items in the JAGS syntax
 
 # initial values for MCMC chain:
 jags.inits.f <- function(){
-    phi = rbeta(1, pr.phi[1],pr.phi[2])
-    # return a named list with the same names as the random variables in the JAGS model
-    ret <- list(phi = phi)
+    logit.phi = rnorm(1, 2, 1)
+    ret <- list( logit.phi = logit.phi)
     return(ret)
 }
 
@@ -135,9 +141,11 @@ m <- jags.model(file = jags.model.file,data=jags.data, inits = jags.inits.f, n.c
 # BURN-IN PHASE
 update(m,n.burn)
 # GET POSTERIOR SAMPLES
-post <- coda.samples(model=m, variable.names = c("phi"), n.iter=n.iter, thin=thin_)
+post <- coda.samples(model=m, variable.names = c("phi","logit.phi"), n.iter=n.iter, thin=thin_)
 # (optional) collapse the three chains into a chain matrix
 post.matrix <- do.call("rbind",post)
+
+
 
 #############################################################################
 # EXERCISE THREE: A Logistic Regression
@@ -157,13 +165,13 @@ x2 <- c(1.9,1.63,0.43,1.57,-0.98,1.29,1.14,-0.58,1.01,1.68,0.09,1.19,1.23,1.18,-
 # jags model syntax
 jags.txt <- "model{
 # priors
-beta0 ~ ??????
-beta1 ~ ??????
-beta2 ~ ??????
+beta0 ~ dnorm( 1.38, pow(0.5, -2) ) # intercept
+beta1 ~ dnorm( 0, 1 )
+beta2 ~ dnorm( 0, 1 )
 # likelihood
 for(i in 1:length(y)){ # loop through each observation
     # linear regression on logit scale
-   logit.mu[i] <- beta0 + beta1*x1[i] + beta2*x2[i]
+   logit.mu[i] <- beta0 + beta1*x1[i] + beta2*x2[i] 
    # convert to probability scale
    phi[i] <- 1/(1+exp(-logit.mu[i]))
    # likelihood
@@ -180,10 +188,7 @@ sink() # close the connection
 jags.data <- list(
     y = y,
     x1=x1,
-    x2=x2,
-    pr.beta0 = ???,
-    pr.beta1 = ???,
-    pr.beta2 = ???
+    x2=x2
     )
 # jags expects the list to have names corresponding to all the data-items in the JAGS syntax
 
@@ -203,15 +208,15 @@ jags.inits.f <- function(){
 n.chains <- 3 # number of MCMC chains
 n.adapt <- 1000 # adaption phase for MCMC sampler
 n.burn <- 1000 # burn-in phase to ensure convergence of chains
-n.iter <- 10000 # number of MCMC iterations per chain
-thin_ <- 10 # thin the chain to reduce auto-correlation
+n.iter <- 30000 # number of MCMC iterations per chain
+thin_ <- 30 # thin the chain to reduce auto-correlation
 
 # COMPILE THE JAGS MODEL
 m <- jags.model(file = jags.model.file,data=jags.data, inits = jags.inits.f, n.chains=n.chains, n.adapt=n.adapt)
 # BURN-IN PHASE
 update(m,n.burn)
 # GET POSTERIOR SAMPLES
-post <- coda.samples(model=m, variable.names = c("phi"), n.iter=n.iter, thin=thin_)
+post <- coda.samples(model=m, variable.names = c("beta0","beta1","beta2"), n.iter=n.iter, thin=thin_)
 # (optional) collapse the three chains into a chain matrix
 post.matrix <- do.call("rbind",post)
 
