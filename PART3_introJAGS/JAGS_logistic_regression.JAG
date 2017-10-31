@@ -1,0 +1,10 @@
+model{
+beta0 ~ dnorm( 1.38, pow(0.5, -2) ) # intercept
+beta1 ~ dnorm( 0, 1 )
+beta2 ~ dnorm( 0, 1 )
+for(i in 1:length(y)){ # loop through each observation
+   logit.mu[i] <- beta0 + beta1*x1[i] + beta2*x2[i] 
+   phi[i] <- 1/(1+exp(-logit.mu[i]))
+   y[i] ~ dbern(phi[i])
+}
+}

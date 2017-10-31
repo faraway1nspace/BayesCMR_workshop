@@ -125,7 +125,7 @@ jags.inits.f <- function(){
     z <- z[,2:(ncol(z)-1)]
     return(list(phi=phi,
                 p=p,
-                z=z)
+                z=z )
            )
     }
 

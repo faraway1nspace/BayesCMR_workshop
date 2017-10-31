@@ -1,0 +1,6 @@
+model{
+phi ~ dbeta(pr.phi[1],pr.phi[2])
+for(i in 1:length(y)){ # loop through each observation
+  y[i] ~ dbern(phi)
+}
+}

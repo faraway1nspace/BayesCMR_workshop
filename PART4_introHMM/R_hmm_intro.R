@@ -9,7 +9,7 @@
 # NOTE: * Real POPAN models would always have time-varying recruitment probabilities
 # THIS IS FOR EDUCATIONAL PURPOSES ONLY!!!
 library(rjags)
-
+library(boot)
 # the data
 y<-c(0,0,0,0,1,0,1,1,0,0,0)
 T<-11 # number of capture periods
@@ -175,13 +175,30 @@ pr.psi=matrix(1,T,2) # flat Beta prior on recruitment
 # notice that pr.psi is a MATRIX
 print(pr.psi)
 
-# EDIT THE JAGS SYNTAX
 jags.model.txt <- "model{
 # PRIORS
+p ~ dbeta(pr.p[1], pr.p[2]) # prior on capture history
+phi ~ dbeta(pr.phi[1], pr.phi[2]) # prior on survival
+for(t in 1:T){
+  psi[t] ~ dbeta(pr.psi[t,1], pr.psi[t,2]) # prior on recruitment
+} # t
 
 # HMM TRANSITION MATRIX
-
-# HMM EMISSION MATRIX: stays the same
+# FROM unborn (col1) to...
+for(t in 1:T){
+  tr[1,1,t] <- 1-psi[t] # unborn to unborn
+  tr[2,1,t] <- psi[t]   # unborn to alive
+  tr[3,1,t] <- 0     # (illegal)
+   # FROM alive (col2) to...
+  tr[1,2,t] <- 0     # (illegal)
+  tr[2,2,t] <- phi   # alive to alive
+  tr[3,2,t] <- 1-phi # alive to dead
+# FROM dead (col3) to...
+  tr[1,3,t] <- 0     # (illegal)
+  tr[2,3,t] <- 0     # (illegal)
+  tr[3,3,t] <- 1     # dead to dead
+}
+# HMM EMISSION MATRIX
 # state 1: unborn (100% no capture)
 em[1,1]<-1  
 em[2,1]<-0  
@@ -192,16 +209,35 @@ em[2,2]<-p
 em[1,3]<-1  
 em[2,3]<-0
 
-# HMM PROCESSES: LOOP THROUGH ALL INDIVIDIUALS?
-for( i in 1:M){ 
-  
- } # i
+# HMM LATENT STATE PROCESS: at t=1
+for(i in 1:M){
+  z[i,1] ~ dcat(tr[,1,1]) # initialize state 1 
+  # CONDITIONAL LIKELIHOOD: at t=1
+  y[i,1] ~ dcat(em[, z[i,1] ]) # conditional capture
+  # loop though capture periods > 1
+  for(t in 2:T){
+     z[i,t] ~ dcat(tr[,z[i,t-1],t]) # z_t | z_t-1
+     # CONDITIONAL LIKELIHOOD: for t>1
+     y[i,t] ~ dcat(em[,z[i,t]]) # conditional capture
+  } # t
+} # M
 }"
-jags.file <- "JAGS_hmm_exercise2_mycode.JAG"
+jags.file <- "JAGS_hmm_intro.JAG"
 # save the JAGS model syntax to a local file
 sink(file=jags.file) # open connection
 cat(jags.model.txt,fill=TRUE) # send model syntax to the file
 sink() # close connection
+
+# ASSEMBLE THE DATA: into a list
+y.jags <- y+1 # convert (0,1) into (1,2) for JAGS model
+jags.data <- list(
+    y = y.jags, # capture data
+    T=T,
+    pr.psi=pr.psi, 
+    pr.phi=pr.phi, 
+    pr.p=pr.p 
+)
+
 
 # ASSEMBLE THE DATA: into a list
 y.jags <- y+1 # convert (0,1) into (1,2) for JAGS model
@@ -271,6 +307,8 @@ acf(post.matrix[,"psi[1]"]) # auto-correlation
 
 # Add the following lines of code to your previous JAGS file
 # (take care to insert the code BEFORE the final bracket }
+
+
 
 '# DERIVATIVES: Pop abundance and recruits
 for(i in 1:M){
