@@ -38,20 +38,45 @@ See the notes at the end of the PDF from Part 1.
 PART 4: Hidden Markov Models, a Unifying Framework for CMR
 -------------------------------------------------------------------
 
-This tutorial shows how the CJS, POPAN, PCRD, and MSCRD are just variants of a more general Hidden-Markov Model. Participants learn about how to specify <b>transmission matrices</b> and <b>emission matrices</b> in the JAGS syntax as well as the rationale behind the <b>latent state markov process</b> and the <b>complete data likelihood</b> to recast a variety of CMR models as HMMs. 
+This tutorial shows how the CJS, POPAN, PCRD, and MSCRD are just variants of a more general Hidden-Markov Model. Participants learn about how to specify transmission matrices and emission matrices in the JAGS syntax as well as the rationale behind the latent state markov process and the complete data likelihood to recast a variety of CMR models as HMMs. 
 1. exercise 1 is to run a simple HMM (like a POPAN model) for a single capture-history, then
 2. exercise 2 generalizes the HMM for multiple capture histories and time-varying parameters, then
 3. exercise 3 add's POPAN-like derivatives to the JAGS script (Super-population, population abundance births, and probability of entry)
 
 See the [lecture PDF](https://github.com/faraway1nspace/BayesCMR_workshop/blob/master/PART4_introHMM/hmm_intro.pdf) and the [PDF describing the tutorials](https://github.com/faraway1nspace/BayesCMR_workshop/blob/master/PART4_introHMM/hmm_practical.pdf). The R code is in [PART 4 directory](./PART4_introHMM/).
 
+**Key concepts and techniques**:
+- HMM transmission and emission matrices
+- latent states and the latent Markov process
+- complete data likelihood
+
 PART 5: Cormack-Jolly-Seber as a HMM
 ------------------------------------
 
-This tutorial introduces the idea of *conditioning on the first capture* and re-casts the CJS model as a very simple HMM. Capture recapture data is from ??. Also discussed are the Horvitz-Thompson estimator of abundance.
+This tutorial introduces the idea of *conditioning on the first capture* and re-casts the CJS model as a very simple HMM. Capture recapture data is from [Nicholson et al](http://dx.doi.org/10.1071/MF12210). Also discussed are the Horvitz-Thompson estimator of abundance and linear-model-type specifications of capture-histories (e.g., for individual heterogeneity).
 
-See the [lecture PDF](./master/PART5_CJS/cjs.pdf) and [R/JAGS tutorial files](./master/PART5_CJS/). 
+See the [lecture PDF](./PART5_CJS/cjs.pdf) and [R/JAGS tutorial files](./PART5_CJS/).
 
+**Key concepts and techniques**:
+- first-capture vs full-capture models
+- Horvitz-Thompson abundance estimation
+- linear models for CMR parameters
+
+
+PART 7: POPAN and Model-Selection
+---------------------------------
+foobar 
+
+PART 8: Pollock's Closed Robust Design, and Hierarchical Bayes
+--------------------------------------------------------------
+This tutorial introduces the Kendall model for temporary emigration and the Pollock's Closed Robust Design. See the [lecture PDF](./PART7_PCRD/pcrd.pdf) and [R/JAGS tutorial files](./PART7_PCRD/) called `R_pcrd.R`.
+
+**Key concepts and techniques**:
+- secondary periods and population-closure
+- nested for loops
+- Hierarchical Bayes and random-effects
+- hyperpriors and shrinkage
+- 
 
 
 INSTALLATION
