@@ -3,7 +3,9 @@ Welcome to the SMM2017 workshop on Bayesian Capture-recapture. This page contain
 - 8 lectures and tutorials
 - R and JAGS code
 
-The focus of the workshop was to introduce [JAGS](http://www.google.com/url?q=http://mcmc-jags.sourceforge.net/&sa=U&ved=0ahUKEwjf38Gb6tXWAhUIVLwKHejnA2EQFggdMAQ&usg=AOvVaw3VPi0Ffru14OG--3erpJZh) for Bayesian Capture-Mark-Recapture (including models CJS, POPAN, PCRD, MSCRD as a more general type of Hidden Markov Model). The underlying idea is based on the work of Rankin and Nicholson et al. 2016 Paper and Rankin's 2017 Ph.D. thesis. The general public may find the lectures and R code useful to make their own  CJS, POPAN, PCRD, and MSCRD models in JAGS. 
+The focus of the workshop was to introduce [JAGS](http://www.google.com/url?q=http://mcmc-jags.sourceforge.net/&sa=U&ved=0ahUKEwjf38Gb6tXWAhUIVLwKHejnA2EQFggdMAQ&usg=AOvVaw3VPi0Ffru14OG--3erpJZh) for Bayesian Capture-Mark-Recapture (including models CJS, POPAN, PCRD, MSCRD as a more general type of Hidden Markov Model). The underlying idea is based on the paper of [Rankin and Nicholson et al. 2016](http://journal.frontiersin.org/article/10.3389/fmars.2016.00025) and [Rankin's 2017 Ph.D. thesis](http://researchrepository.murdoch.edu.au/id/eprint/38257/). Researchers may find the lectures and R/JAGS code useful to make their own CJS, POPAN, PCRD, and MSCRD models in JAGS.
+
+Feel free to submit feature requests and report issues in the Github issue tracker page (see link above)
 
 OUTLINE
 -------
