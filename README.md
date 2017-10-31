@@ -53,30 +53,35 @@ See the [lecture PDF](https://github.com/faraway1nspace/BayesCMR_workshop/blob/m
 PART 5: Cormack-Jolly-Seber as a HMM
 ------------------------------------
 
-This tutorial introduces the idea of *conditioning on the first capture* and re-casts the CJS model as a very simple HMM. Capture recapture data is from [Nicholson et al](http://dx.doi.org/10.1071/MF12210). Also discussed are the Horvitz-Thompson estimator of abundance and linear-model-type specifications of capture-histories (e.g., for individual heterogeneity).
+This tutorial introduces the idea of *conditioning on the first capture* and re-casts the CJS model as a very simple HMM. Capture recapture data is from [Nicholson et al](http://dx.doi.org/10.1071/MF12210). Also discussed are the Horvitz-Thompson estimator of abundance, as well as using the linear-model specification to include individual and temporarl covariates in capture-probabilities (e.g., for individual heterogeneity, sex, and effort information)
 
-See the [lecture PDF](./PART5_CJS/cjs.pdf) and [R/JAGS tutorial files](./PART5_CJS/).
+See the [lecture PDF](./PART5_CJS/cjs.pdf) and [R/JAGS tutorial files](./PART5_CJS/) especially the file `R_cjs.R`.
 
 **Key concepts and techniques**:
 - first-capture vs full-capture models
 - Horvitz-Thompson abundance estimation
 - linear models for CMR parameters
+- sex and effort as covariates
 
 
-PART 7: POPAN and Model-Selection
+PART 6: POPAN and Model-Selection
 ---------------------------------
-foobar 
+This section revisits the simple three-state POPAN model, using data from [Hunt et al](http://www.int-res.com/abstracts/esr/v32/p71-88/). Part 1 of the lecture ([popan.pdf](./PART6_POPAN/popan.pdf)) discusses POPAN in detail, whereas Part 2 of the lecture ([popan2.pdf](./PART6_POPAN/popan2.pdf)) addresses Bayesian model selection according to a philosophical positions: predictive criteria (such the WAIC) versus athe prequentialist/Bayes Factor criteria. See the R file `R_popan.R`.
 
-PART 8: Pollock's Closed Robust Design, and Hierarchical Bayes
+PART 7: Pollock's Closed Robust Design, and Hierarchical Bayes
 --------------------------------------------------------------
-This tutorial introduces the Kendall model for temporary emigration and the Pollock's Closed Robust Design. See the [lecture PDF](./PART7_PCRD/pcrd.pdf) and [R/JAGS tutorial files](./PART7_PCRD/) called `R_pcrd.R`.
+This tutorial introduces the Kendall model for temporary emigration and the Pollock's Closed Robust Design. See the [lecture PDF](./PART7_PCRD/pcrd.pdf) and [R/JAGS tutorial files](./PART7_PCRD/), espcially the file called `R_pcrd.R`.
 
 **Key concepts and techniques**:
 - secondary periods and population-closure
 - nested for loops
 - Hierarchical Bayes and random-effects
 - hyperpriors and shrinkage
-- 
+
+PART 9: Multistrata Close Robust Design
+---------------------------------------
+
+This simply showcases an actual JAGS script from a current study using the MSCRD to model a population of Humpback dolphins in Australia. The key-point is that, although seemingly complex, this model has basically the same structure as all the previous models (transmission and emission matrices, etc.). See the R file `R_example_mscrd_cagn.R`.
 
 
 INSTALLATION
