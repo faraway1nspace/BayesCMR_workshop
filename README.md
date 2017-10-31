@@ -15,7 +15,7 @@ OUTLINE
 PART 1: History, Philosophy and Properties of Bayesian Inference
 ----------------------------------------------------------------
 
-A brief introduction to Bayesianism, in general. PDF presentation [here](http://foo.bar). No R/JAGS code 
+A brief introduction to Bayesianism. What is *posterior inference*? What divides *subjective* vs objective Bayesians? How do sample-size and *prior information* influence the frequency properties of a Bayes estimator?  What is sample-based approximation? [PDF presentation here](https://github.com/faraway1nspace/BayesCMR_workshop/blob/master/PART1_introBayes/bayesian_intro.pdf). No R/JAGS code 
 
 
 PART 2: Introduction to Priors and Probabilities
