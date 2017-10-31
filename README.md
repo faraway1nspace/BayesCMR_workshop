@@ -3,30 +3,30 @@ Welcome to the SMM2017 workshop on Bayesian Capture-recapture. This page contain
 - 8 lectures and tutorials
 - R and JAGS code
 
-The focus of the workshop was to introduce [JAGS](http://www.google.com/url?q=http://mcmc-jags.sourceforge.net/&sa=U&ved=0ahUKEwjf38Gb6tXWAhUIVLwKHejnA2EQFggdMAQ&usg=AOvVaw3VPi0Ffru14OG--3erpJZh) for Bayesian Capture-Mark-Recapture (including models CJS, POPAN, PCRD, MSCRD as a more general type of Hidden Markov Model). The underlying idea is based on the paper of [Rankin and Nicholson et al. 2016](http://journal.frontiersin.org/article/10.3389/fmars.2016.00025) and [Rankin's 2017 Ph.D. thesis](http://researchrepository.murdoch.edu.au/id/eprint/38257/). Researchers may find the lectures and R/JAGS code useful to make their own CJS, POPAN, PCRD, and MSCRD models in JAGS.
+The focus of the workshop was to introduce [JAGS](http://mcmc-jags.sourceforge.net/) for Bayesian Capture-Mark-Recapture (including models CJS, POPAN, PCRD, MSCRD as a more general type of Hidden Markov Model). The underlying idea is based on the paper of [Rankin and Nicholson et al. 2016](http://journal.frontiersin.org/article/10.3389/fmars.2016.00025) and [Rankin's 2017 Ph.D. thesis](http://researchrepository.murdoch.edu.au/id/eprint/38257/). Researchers may find the lectures and R/JAGS code useful to make their own CJS, POPAN, PCRD, and MSCRD models in JAGS.
 
 Feel free to submit feature requests and report issues in the Github issue tracker page (see link above)
 
-A special thanks to those researchers who let us their odontocetes capture-recapture data-set for some of the practical exercises, including Dr. Tim Hunt (*Humpback dolphins*, POPAN, Part 6), Krista Nicholson (*Bottlenose dolphins*, PCRD, Part 7), and Dr. Daniele Cagnazzi (*Humpback dolphins*, MSCRD, Part 8, unpublished). These data-sets are detailed in their respective publications: [Hunt et al](http://www.int-res.com/abstracts/esr/v32/p71-88/), [Nicholson et al](http://www.int-res.com/abstracts/esr/v32/p71-88/), and unpublished data from Cagnazzi (but see his [Doctoral Thesis](http://epubs.scu.edu.au/theses/344/)). 
+**Data** A special thanks to those researchers who let us their odontocetes capture-recapture data-set for some of the practical exercises, including Dr. Tim Hunt (*Humpback dolphins*, POPAN, Part 6), Krista Nicholson (*Bottlenose dolphins*, PCRD, Part 7), and Dr. Daniele Cagnazzi (*Humpback dolphins*, MSCRD, Part 8, unpublished). These data-sets are detailed in their respective publications: [Hunt et al](http://www.int-res.com/abstracts/esr/v32/p71-88/), [Nicholson et al](http://dx.doi.org/10.1071/MF12210), and unpublished data from Cagnazzi (but see his [Doctoral Thesis](http://epubs.scu.edu.au/theses/344/)). 
 
 OUTLINE
 -------
 
 ![Outline](/img/outline.png)
 
-PART 1: History, Philosophy and Properties of Bayesian Inference
-----------------------------------------------------------------
+PART 1: Bayesian Inference: History, Philosophy, and Properties
+--------------------------------------------------------------
 
 A brief introduction to Bayesianism. What is *posterior inference*? What divides *subjective* vs objective Bayesians? How do sample-size and *prior information* influence the frequency properties of a Bayes estimator?  What is sample-based approximation? [PDF presentation here](https://github.com/faraway1nspace/BayesCMR_workshop/blob/master/PART1_introBayes/bayesian_intro.pdf). No R/JAGS code 
 
 
-PART 2: Introduction to Priors and Probabilities
+PART 2: Priors and Probabilities
 ------------------------------------------------
 
-This was a simple exercise for participants to study some common probability distributions available in [JAGS](http://www.google.com/url?q=http://mcmc-jags.sourceforge.net/&sa=U&ved=0ahUKEwjf38Gb6tXWAhUIVLwKHejnA2EQFggdMAQ&usg=AOvVaw3VPi0Ffru14OG--3erpJZh). A PDF lecture is here. A few helpful R functions are available here. 
+This was a simple exercise for participants to study some common probability distributions available in [JAGS](http://mcmc-jags.sourceforge.net/). A PDF lecture is here. A few helpful R functions are available here. 
 
 
-PART 3: Introduction to JAGS
+PART 3: JAGS
 ----------------------------
 This part included 3 exercises to familiarize participants with the JAGS syntax and R workflow. The emphasis in on i) encoding prior beliefs and ii) encoding the likelihood (joint probability distribution of the data), together which serve as the basic skeleton for all subsequent JAGS models. There are three JAGS exercises in the [R file](./PART3_introJAGS/) as part of this section:
 - a simple Bernoulli model for average annual survival of 30 dolphins (with *Beta* Priors)
@@ -35,7 +35,7 @@ This part included 3 exercises to familiarize participants with the JAGS syntax 
 
 See the notes at the end of the PDF from Part 1. 
 
-PART 4: Intro to Hidden Markov Models, a Unifying Framework for CMR
+PART 4: Hidden Markov Models, a Unifying Framework for CMR
 -------------------------------------------------------------------
 
 This tutorial shows how the CJS, POPAN, PCRD, and MSCRD are just variants of a more general Hidden-Markov Model. Participants learn about how to specify <b>transmission matrices</b> and <b>emission matrices</b> in the JAGS syntax as well as the rationale behind the <b>latent state markov process</b> and the <b>complete data likelihood</b> to recast a variety of CMR models as HMMs. 
@@ -44,6 +44,13 @@ This tutorial shows how the CJS, POPAN, PCRD, and MSCRD are just variants of a m
 3. exercise 3 add's POPAN-like derivatives to the JAGS script (Super-population, population abundance births, and probability of entry)
 
 See the [lecture PDF](https://github.com/faraway1nspace/BayesCMR_workshop/blob/master/PART4_introHMM/hmm_intro.pdf) and the [PDF describing the tutorials](https://github.com/faraway1nspace/BayesCMR_workshop/blob/master/PART4_introHMM/hmm_practical.pdf). The R code is in [PART 4 directory](./PART4_introHMM/).
+
+PART 5: Cormack-Jolly-Seber as a HMM
+------------------------------------
+
+This tutorial introduces the idea of *conditioning on the first capture* and re-casts the CJS model as a very simple HMM. Capture recapture data is from ??. Also discussed are the Horvitz-Thompson estimator of abundance.
+
+See the [lecture PDF](./master/PART5_CJS/cjs.pdf) and [R/JAGS tutorial files](./master/PART5_CJS/). 
 
 
 
